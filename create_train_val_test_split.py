@@ -16,12 +16,9 @@ def create_train_val_test_split(data_csv_path:str, dataset_name:str, train_split
     test_data_writer = csv.writer(test_data_csv)
 
     row_list = []
-    #print(len(row_list))
 
     for row in data_csv_reader:
         row_list.append(row)
-
-    #print(len(row_list))
 
     num_examples = len(row_list)
     train_split = round(train_split_percentage * num_examples) #https://docs.python.org/3/library/functions.html?highlight=round#round
@@ -32,16 +29,16 @@ def create_train_val_test_split(data_csv_path:str, dataset_name:str, train_split
     val_index = train_index + val_split
     test_index = num_examples
 
-    # print(train_split)
-    # print(val_split)
-    # print(test_split)
-    # print(num_examples)
+    num_samples_after_division = train_split + val_split + test_split
 
-    assert train_split + val_split + test_split == num_examples
+    if num_samples_after_division != num_examples:
+        num_examples_needed = num_examples - num_samples_after_division
+        if num_examples_needed < 0:
+            raise ValueError("You should not have more examples than are in the list.")
+
+        train_index += num_examples_needed 
 
     random.shuffle(row_list) #https://docs.python.org/3/library/random.html
-
-    print(len(row_list))
 
     train_examples = row_list[0:train_index]
     val_examples = row_list[train_index:val_index]
@@ -70,7 +67,11 @@ train_split_percentage = 0.6
 val_split_percentage = 0.2
 test_split_percentage = 0.2
 
-create_train_val_test_split(dataset_1_csv_path, dataset_1_name, train_split_percentage, val_split_percentage, test_split_percentage)
+
+#Create train/val/test splits for each dataset
+#create_train_val_test_split(dataset_1_csv_path, dataset_1_name, train_split_percentage, val_split_percentage, test_split_percentage)
+#create_train_val_test_split(dataset_2_csv_path, dataset_2_name, train_split_percentage, val_split_percentage, test_split_percentage)
+
 
 
 
