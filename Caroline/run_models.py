@@ -26,12 +26,6 @@ def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/r
     df_without_labels = df.drop("label", axis=1)
 
     return df_without_labels, labels
-    
-def train_logistic_regression(penalty_type, X, y):
-    lr = LogisticRegression(penalty=penalty_type)
-    model = lr.fit(X, y)
-
-    return model
         
 
 
@@ -46,8 +40,10 @@ dataset2_X_val, dataset2_y_val = get_data("../dataset2_validation_data.csv")
 dataset2_X_test, dataset2_y_test = get_data("../dataset2_testing_data.csv")
 
 penalty_type = 'l2' #only l2 or no regularization for the default solver. Change solvers?
+lr = LogisticRegression(penalty=penalty_type)
+model = lr.fit(X, y)
 
-train_logistic_regression(penalty_type, dataset2_X_train, dataset1_y_train)
+
 
 
 

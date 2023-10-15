@@ -60,17 +60,17 @@ def create_train_val_test_split(data_csv_path:str, dataset_name:str, train_split
 dataset_1_csv_path = "data1.csv"
 dataset_1_name = "dataset1"
 
-dataset_2_csv_path = "data2.csv"
+dataset_2_csv_path = "data2_with_all_numerical_features.csv"
 dataset_2_name = 'dataset2'
 
-train_split_percentage = 0.6
-val_split_percentage = 0.2
+train_split_percentage = 0.8
+val_split_percentage = 0.0
 test_split_percentage = 0.2
 
 
 #Create train/val/test splits for each dataset
 #create_train_val_test_split(dataset_1_csv_path, dataset_1_name, train_split_percentage, val_split_percentage, test_split_percentage)
-#create_train_val_test_split(dataset_2_csv_path, dataset_2_name, train_split_percentage, val_split_percentage, test_split_percentage)
+create_train_val_test_split(dataset_2_csv_path, dataset_2_name, train_split_percentage, val_split_percentage, test_split_percentage)
 
 
 
