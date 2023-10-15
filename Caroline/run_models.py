@@ -29,17 +29,9 @@ def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/r
     
 def train_logistic_regression(penalty_type, X, y):
     lr = LogisticRegression(penalty=penalty_type)
-    num_examples = len(X)
-    num_examples_to_train_on = [(int(round((i/10) * num_examples))) for i in range(1, 11)]
-    examples_to_train_on[len(num_examples_to_train_on) - 1] = num_examples #set this in case of effects from rounding
-    models_list = []
-    models_training_accuracies = []
+    model = lr.fit(X, y)
 
-    for training_example_size in num_examples_to_train_on:
-        x_vals = X[0:training_sample_size]
-        y_vals = y[0:training_sample_size]
-
-        model = lr.fit(x_vals, y_vals)
+    return model
         
 
 
@@ -55,7 +47,7 @@ dataset2_X_test, dataset2_y_test = get_data("../dataset2_testing_data.csv")
 
 penalty_type = 'l2' #only l2 or no regularization for the default solver. Change solvers?
 
-train_logistic_regression(penalty_type, dataset2_X_val, dataset1_y_val)
+train_logistic_regression(penalty_type, dataset2_X_train, dataset1_y_train)
 
 
 
