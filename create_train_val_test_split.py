@@ -63,8 +63,8 @@ dataset_1_name = "dataset1"
 dataset_2_csv_path = "data2_with_all_numerical_features.csv"
 dataset_2_name = 'dataset2'
 
-train_split_percentage = 0.8
-val_split_percentage = 0.0
+train_split_percentage = 0.6
+val_split_percentage = 0.2
 test_split_percentage = 0.2
 
 
