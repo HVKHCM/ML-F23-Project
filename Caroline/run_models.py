@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+import csv
 
 #Read data from csv
 
@@ -34,6 +35,8 @@ def test_and_evaluate_model(model, X_test, y_test):
     num_test_labels = len(y_test)
 
     assert num_test_examples == num_test_labels
+
+    predictions = []
 
     for test_example in X_test.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
         test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
@@ -97,19 +100,24 @@ def train_and_test_logistic_regressions(penalties:list, solvers:list, max_iters:
                 lr_model_dataset1 = lr.fit(dataset1_X_train, dataset1_y_train)
                 lr_model_dataset2 = lr.fit(dataset2_X_train, dataset2_y_train)
 
+                #TODO maybe we just don't include test data here because we want to only evaluate one model on the test data
+
                 if use_test_set:
                     model_1, accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_test, dataset1_y_test)
-                    model_2, accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_test, dataset2_y_test)
+                    #model_2, accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_test, dataset2_y_test)
                 else:
                     model_1, accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_val, dataset1_y_val)
-                    model_2, accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_val, dataset2_y_val)
+                    #model_2, accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_val, dataset2_y_val)
                 
                 output_csv_writer.writerow([model_1, "1", penalty, solver, max_iter, accuracy_1, precision_1, recall_1, f_1_1, auc_1])
-                output_csv_writer.writerow([model_2, "2", penalty, solver, max_iter, accuracy_2, precision_2, recall_2, f_1_2, auc_2])
+                #output_csv_writer.writerow([model_2, "2", penalty, solver, max_iter, accuracy_2, precision_2, recall_2, f_1_2, auc_2])
                 
     print("Done training and testing Logistic Regression Models!")
 
 
+def train_and_test_svms(Cs:list, kernels:list, degrees:list, gammas:list, output_csv_path, use_test_set:bool):
+    output_csv_file = open(output_csv_path, 'w', newline='')
+    output_csv_writer = csv.writer(output_csv_file)
 
 
 
@@ -127,9 +135,9 @@ use_test_set = False
 #Run Logistic Regression
 penalty_types = ['l2'] #only l2 or no regularization for the default solver. Change solvers?
 solvers = ['lbfgs']
-max_iterations = [500]
-logistic_regression_output_csv_path = "logistic_regression_results.csv"
-
+max_iterations = [2000]
+logistic_regression_validation_output_csv_path = "logistic_regression_validation_results.csv"
+train_and_test_logistic_regressions(penalty_types, solvers, max_iterations, logistic_regression_validation_output_csv_path, use_test_set)
 
 #Run SVM
 # C = 1.0
