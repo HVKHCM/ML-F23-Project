@@ -114,11 +114,11 @@ def train_and_test_logistic_regressions(penalties:list, solvers:list, max_iters:
                 lr_model_dataset1 = lr.fit(dataset1_X_train, dataset1_y_train)
                 lr_model_dataset2 = lr.fit(dataset2_X_train, dataset2_y_train)
         
-                accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_val, dataset1_y_val)
-                #accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_val, dataset2_y_val)
+                #accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_val, dataset1_y_val)
+                accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_val, dataset2_y_val)
                 
-                output_csv_writer.writerow([lr_model_dataset1, "1", penalty, solver, max_iter, accuracy_1, precision_1, recall_1, f_1_1, auc_1])
-                #output_csv_writer.writerow([lr_model_dataset2, "2", penalty, solver, max_iter, accuracy_2, precision_2, recall_2, f_1_2, auc_2])
+                #output_csv_writer.writerow([lr_model_dataset1, "1", penalty, solver, max_iter, accuracy_1, precision_1, recall_1, f_1_1, auc_1])
+                output_csv_writer.writerow([lr_model_dataset2, "2", penalty, solver, max_iter, accuracy_2, precision_2, recall_2, f_1_2, auc_2])
                 
     print("Done training and testing Logistic Regression Models!")
 
@@ -160,17 +160,17 @@ dataset2_X_val, dataset2_y_val = get_data("../dataset2_validation_data.csv")
 dataset2_X_test, dataset2_y_test = get_data("../dataset2_testing_data.csv")
     
 #Run Logistic Regression
-# penalty_types = ['l2'] #only l2 or no regularization for the default solver. Change solvers?
-# solvers = ['lbfgs']
-# max_iterations = [2000]
-# logistic_regression_validation_output_csv_path = "logistic_regression_validation_results.csv"
-# train_and_test_logistic_regressions(penalty_types, solvers, max_iterations, logistic_regression_validation_output_csv_path)
+penalty_types = ['l2'] #only l2 or no regularization for the default solver. Change solvers?
+solvers = ['lbfgs']
+max_iterations = [2000]
+logistic_regression_validation_output_csv_path = "logistic_regression_validation_results.csv"
+train_and_test_logistic_regressions(penalty_types, solvers, max_iterations, logistic_regression_validation_output_csv_path)
 
 #Run SVM
-Cs = [1.0]
+Cs = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
 kernels = ['rbf']
 degrees = [1]
-gammas = [1.0]
+gammas = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
 svm_validation_output_csv_path = "svm_validation_results.csv"
 train_and_test_svms(Cs, kernels, degrees, gammas, svm_validation_output_csv_path)
 
