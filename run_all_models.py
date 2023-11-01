@@ -169,7 +169,7 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test):
         "max_iter" : [(i * 100) for i in range (1, 11)]
     }
 
-    gsc = GridSearchCV(estimator=lr, param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+    gsc = GridSearchCV(estimator=LogisticRegression(solver="liblinear"), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
     grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
     best_params = grid_result.best_params_
     best_max_iter = best_params["max_iter"]
@@ -204,7 +204,7 @@ def train_and_test_svm(X_train, y_train, X_test, y_test):
         "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
     }
 
-    gsc = GridSearchCV(estimator=svm, param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+    gsc = GridSearchCV(estimator=SVC(), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
     grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
     best_params = grid_result.best_params_
     best_C = best_params["C"]
