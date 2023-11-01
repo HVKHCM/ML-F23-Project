@@ -10,6 +10,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 import csv
+from sklearn.metrics import auc #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html
 
 #Read data from csv
 
@@ -114,7 +115,7 @@ def train_and_test_logistic_regressions(penalties:list, solvers:list, max_iters:
                 lr_model_dataset1 = lr.fit(dataset1_X_train, dataset1_y_train)
                 lr_model_dataset2 = lr.fit(dataset2_X_train, dataset2_y_train)
         
-                #accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_val, dataset1_y_val)
+                accuracy_1, precision_1, recall_1, f_1_1, auc_1 = test_and_evaluate_model(lr_model_dataset1, dataset1_X_val, dataset1_y_val)
                 accuracy_2, precision_2, recall_2, f_1_2, auc_2 = test_and_evaluate_model(lr_model_dataset2, dataset2_X_val, dataset2_y_val)
                 
                 #output_csv_writer.writerow([lr_model_dataset1, "1", penalty, solver, max_iter, accuracy_1, precision_1, recall_1, f_1_1, auc_1])

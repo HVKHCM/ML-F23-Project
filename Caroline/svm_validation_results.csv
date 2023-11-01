@@ -1,2 +1,0 @@
-SVM Model,Dataset,C,Kernel,Degree,Gamma,Accuracy,Precision,Recall,F-1,AUC
-"SVC(degree=1, gamma=1.0)",2,1.0,rbf,1,1.0,0.6444444444444445,0,0.0,0,0

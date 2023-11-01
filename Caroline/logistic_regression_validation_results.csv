@@ -1,2 +1,0 @@
-Logistic Regression Model,Dataset,Penalty,Solver,Max Iterations,Accuracy,Precision,Recall,F-1,AUC
-LogisticRegression(max_iter=2000),2,l2,lbfgs,2000,0.8,0.75,0.65625,0.7,0
