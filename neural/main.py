@@ -25,18 +25,31 @@ for i in test_data:
     X_test.append(i[0])
     y_test.append(i[1])
 
+
+unit1 = np.arange(0, 100, 50)
+unit2 = np.arange(0, 50, 25)
+unit3 = np.arange(0, 20, 10)
+lr = np.arange(0.1,1,0.5)
+
+
+
 #print(y_test)
 
 #X_train_tensor = torch.utils.data.DataLoader(X_df,batch_size=1,shuffle=True)
 
-model = utils.generate_model()
+#model = utils.Net(100, 50, 20)
 loss_fn = nn.CrossEntropyLoss()
-num_epochs = 50
-optimizer = optim.SGD(model.parameters(), lr=0.1)
+#num_epochs = 2
+#optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-trained_model = utils.train_model(model, num_epochs, loss_fn, optimizer, X_train, y_train)
+result_tuple = utils.unit_optimize(epochs=2, loss_fun=loss_fn,X_train=X_train, y_train=y_train, 
+                                   X_test=X_test, y_test=y_test, unit1_range=unit1, unit2_range=unit2, unit3_range=unit3, lr_range=lr)
 
-acc = utils.eval_model(trained_model, X_test, y_test)
+print(result_tuple)
+
+#trained_model = utils.train_model(model, num_epochs, loss_fn, optimizer, X_train, y_train)
+
+#acc = utils.eval_model(trained_model, X_test, y_test)
 #for n in range(num_epochs):
 #    count = 0
 #    print("epoch: {}".format(n))
@@ -59,6 +72,6 @@ acc = utils.eval_model(trained_model, X_test, y_test)
 #    if (prediction[i] == y_test[i]):
 #       correct += 1
 #acc = float(correct/len(prediction))
-print("Model accuracy: %.2f%%" % (acc*100))
+#print("Model accuracy: %.2f%%" % (acc*100))
 #        count += 1
 #print(prediction)

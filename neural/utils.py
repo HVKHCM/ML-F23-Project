@@ -1,6 +1,7 @@
 import torch 
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
 def generate_model():
     model = nn.Sequential(
@@ -14,6 +15,47 @@ def generate_model():
         nn.Softmax()
     )
     return model
+
+
+class Net(nn.Module):
+    def __init__(self, unit1, unit2, unit3):
+        super().__init__()
+        self.layers = nn.ModuleDict()
+
+        self.layers["input"] = nn.Linear(in_features=784, out_features=unit1)
+        
+        self.layers["hidden_0"] = nn.Linear(in_features=unit1, out_features=unit2)
+
+        self.layers["hidden_1"] = nn.Linear(in_features=unit2, out_features=unit3)
+        
+        self.layers["output"] = nn.Linear(in_features=unit3, out_features=10)
+
+    def forward(self,x):
+        x = self.layers["input"](x)
+
+        for i in range(2):
+            x = F.sigmoid(self.layers[f"hidden_{i}"](x))
+        
+        return F.softmax(self.layers["output"](x))
+
+def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, unit3_range, lr_range):
+    accuracy_list = []
+    all_config = []
+    for i in unit1_range:
+        for j in unit2_range:
+            for k in unit3_range:
+                for l in lr_range:
+                    config = []
+                    config.append(i)
+                    config.append(j)
+                    config.append(k)
+                    config.append(l)
+                    model = Net(i, j, k)
+                    optimizer = optim.SGD(model.parameters(), lr=l)
+                    trained_model = train_model(model,epochs, loss_fun, optimizer, X_train, y_train)
+                    accuracy_list.append(eval_model(trained_model, X_test, y_test))
+                    all_config.append(config)
+    return (accuracy_list, all_config)
 
 def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
     for n in range(epochs):
