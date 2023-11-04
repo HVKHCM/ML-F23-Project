@@ -1,0 +1,2 @@
+Model,Accuracy,Precision,Recall,F-1,ROC AUC
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9734513274336283,0.9767441860465116,0.9545454545454546,0.9655172413793104,0.9950592885375494

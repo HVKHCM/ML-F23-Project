@@ -6,10 +6,13 @@ import seaborn as sns
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score,f1_score,roc_auc_score,roc_curve
-from sklearn.model_selection import cross_val_score,cross_val_predict ,GridSearchCV
+from sklearn.model_selection import cross_val_score,cross_val_predict, GridSearchCV
 from sklearn.ensemble import BaggingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+import csv
 
 #Get data
 def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/reference/frame.html 
@@ -75,7 +78,11 @@ def process_data():
     
     return dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test 
 
-def test_model(model, predictions, X_test, y_test):
+def test_model(model, predictions, X_test, y_test, output_csv_path):
+
+    output_csv_file = open(output_csv_path, 'w', newline='')
+    writer = csv.writer(output_csv_file)
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
 
     accuracy = accuracy_score(y_test, predictions)
     
@@ -86,6 +93,8 @@ def test_model(model, predictions, X_test, y_test):
     f1 = f1_score(y_test, predictions)
     
     roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+
+    writer.writerow([model, accuracy, precision, recall, f1, roc_auc])
     
     print('accuracy')
     print(accuracy, '\n')
@@ -104,20 +113,13 @@ def test_model(model, predictions, X_test, y_test):
 
 
 #Decision Tree
-def train_and_test_decision_tree(X_train, y_train, X_test, y_test):
+def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_path):
     
     gsc = GridSearchCV(estimator=DecisionTreeClassifier(criterion='gini'),param_grid={'max_depth': range(3,8), 'min_samples_split': range(2,5),'min_samples_leaf': range(1,5)},cv=10, scoring='accuracy', verbose=0, n_jobs=-1)    
     grid_result = gsc.fit(X_train, y_train) #Results of the Decision Tree classifier with the optimize hyperparameters after 10-fold CV
+    dt = grid_result.best_estimator_
     best_params = grid_result.best_params_ #Best paramerts
     best_score = grid_result.best_score_ #Score of the best model
-    
-    print("Best hyperparameters")
-    print(best_params, '\n')
-    
-    print("Best score from CV")
-    print(best_score, '\n')
-    
-    dt = DecisionTreeClassifier(criterion='gini',max_depth=best_params["max_depth"], random_state=0) #Create DT with optimal Hyperparameters
 
     model = dt.fit(X_train, y_train) 
     
@@ -133,12 +135,12 @@ def train_and_test_decision_tree(X_train, y_train, X_test, y_test):
         prediction = model.predict(test_example_df)[0]
         predictions.append(prediction)
 
-    test_model(model, predictions, X_test, y_test)
+    test_model(model, predictions, X_test, y_test, output_csv_path)
 
     return dt
 
 #Boosting
-def train_and_test_boosting(dt, X_train, y_train, X_test, y_test):
+def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path):
     
     bag_clf = BaggingClassifier(
     dt, n_estimators=500,
@@ -159,10 +161,10 @@ def train_and_test_boosting(dt, X_train, y_train, X_test, y_test):
         prediction = bag_clf.predict(test_example_df)[0]
         predictions.append(prediction)
        
-    test_model(bag_clf, predictions, X_test, y_test)
+    test_model(bag_clf, predictions, X_test, y_test, output_csv_path)
 
 #Logistic Regression
-def train_and_test_logistic_regression(X_train, y_train, X_test, y_test):
+def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_csv_path):
     
     parameters = {
         "penalty" : ("l1", "l2"),
@@ -172,13 +174,10 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test):
     gsc = GridSearchCV(estimator=LogisticRegression(solver="liblinear"), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
     grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
     best_params = grid_result.best_params_
-    best_max_iter = best_params["max_iter"]
-    best_penalty = best_params["penalty"]
+    best_lr = grid_result.best_estimator_
     best_score = grid_result.best_score_
-
-    lr = LogisticRegression(penalty=best_penalty, solver="liblinear", max_iter=best_max_iter) #TODO come back to this
     
-    lr_model = lr.fit(X_train, y_train)
+    lr_model = best_lr.fit(X_train, y_train)
 
     num_test_examples = len(X_test)
     num_test_labels = len(y_test)
@@ -192,10 +191,10 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test):
         prediction = lr_model.predict(test_example_df)[0]
         predictions.append(prediction)
 
-    test_model(lr_model, predictions, X_test, y_test)
+    test_model(lr_model, predictions, X_test, y_test, output_csv_path)
     
 #SVM
-def train_and_test_svm(X_train, y_train, X_test, y_test):
+def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path):
     
     parameters = {
         "C" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
@@ -207,15 +206,10 @@ def train_and_test_svm(X_train, y_train, X_test, y_test):
     gsc = GridSearchCV(estimator=SVC(), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
     grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
     best_params = grid_result.best_params_
-    best_C = best_params["C"]
-    best_kernel = best_params["kernel"]
-    best_degree = best_params["degree"]
-    best_gamma = best_params["gamma"]
+    best_svm = grid_result.best_estimator_
     best_score = grid_result.best_score_
-
-    svm = SVC(C=best_C, kernel=best_kernel, degree=best_degree, gamma=best_gamma)
     
-    svm_model = svm.fit(X_train, y_train)
+    svm_model = best_svm.fit(X_train, y_train)
 
     num_test_examples = len(X_test)
     num_test_labels = len(y_test)
@@ -229,17 +223,85 @@ def train_and_test_svm(X_train, y_train, X_test, y_test):
         prediction = svm_model.predict(test_example_df)[0]
         predictions.append(prediction)
 
-    test_model(svm_model, predictions, X_test, y_test)
+    test_model(svm_model, predictions, X_test, y_test, output_csv_path)
+
+#KNN
+def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path, range_tune=[1,10],fold=10):
+    #create new a knn model
+    assert range_tune [0] < range_tune[1]
+    knn = KNeighborsClassifier()
+    #create a dictionary of all values we want to test for n_neighbors
+    param_grid = {'n_neighbors': np.arange(range_tune[0], range_tune[1])}
+    #use gridsearch to test all values for n_neighbors
+    knn_gsf = GridSearchCV(knn, param_grid, cv=fold, refit=True)
+    #fit model to data
+    knn_gsf.fit(X_train, y_train)
+
+    best_parameters = knn_gsf.best_params_
+    best_knn = knn_gsf.best_estimator_
+    
+    num_test_examples = len(X_test)
+    num_test_labels = len(y_test)
+
+    assert num_test_examples == num_test_labels
+    
+    predictions = []
+    
+    for test_example in X_test.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+        prediction = best_knn.predict(test_example_df)[0]
+        predictions.append(prediction)
+
+    test_model(best_knn, predictions, X_test, y_test, output_csv_path)
+    
+
+#Random Forests
+def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_csv_path, trees = [1,10], depth=[1,10], fold=10):
+    assert trees[0] < trees[1]
+    assert depth[0] < depth[1]
+    rf = RandomForestClassifier()
+    param_grid = {'n_estimators': np.arange(trees[0], trees[1]), 'max_depth': np.arange(depth[0],depth[1])}
+    rf_gsf = GridSearchCV(rf, param_grid, cv=fold, refit=True)
+
+    rf_gsf.fit(X,y)
+
+    best_parameters = rf_gsf.best_params_
+    best_rf = rf_gsf.best_estimator_
+    
+    num_test_examples = len(X_test)
+    num_test_labels = len(y_test)
+
+    assert num_test_examples == num_test_labels
+    
+    predictions = []
+    
+    for test_example in X_test.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+        prediction = best_rf.predict(test_example_df)[0]
+        predictions.append(prediction)
+
+    test_model(best_rf, predictions, X_test, y_test, output_csv_path)
+
 
 
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 
-dt = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test)
+dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/decision_tree_dataset1.csv")
+dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/decision_tree_dataset2.csv")
 
-train_and_test_boosting(dt, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test)
+train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/boosting_dataset1.csv")
+train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/boosting_dataset2.csv")
 
-train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test)
+train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/logistic_regression_dataset1.csv")
+train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/logistic_regression_dataset2.csv")
 
-train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test)
-    
+train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
+train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
+
+train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
+train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
+
+train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_random_forest_dataset1.csv")
+train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_random_forest_dataset2.csv")
+
 
