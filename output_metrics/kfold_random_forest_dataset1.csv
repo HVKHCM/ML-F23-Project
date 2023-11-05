@@ -1,0 +1,2 @@
+Model,Accuracy,Precision,Recall,F-1,ROC AUC
+"RandomForestClassifier(max_depth=6, n_estimators=8)",0.911504424778761,0.9047619047619048,0.8636363636363636,0.8837209302325582,0.9784255599472991

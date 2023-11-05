@@ -246,13 +246,20 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
     assert num_test_examples == num_test_labels
     
     predictions = []
+
     
     for test_example in X_test.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
         test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = best_knn.predict(test_example_df)[0]
+        try:
+            prediction = best_knn.predict(test_example_df)[0]
+        except:
+            print("Prediction error")
+            return None
         predictions.append(prediction)
 
-    test_model(best_knn, predictions, X_test, y_test, output_csv_path)
+
+
+    #test_model(best_knn, predictions, X_test, y_test, output_csv_path)
     
 
 #Random Forests
@@ -263,7 +270,7 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
     param_grid = {'n_estimators': np.arange(trees[0], trees[1]), 'max_depth': np.arange(depth[0],depth[1])}
     rf_gsf = GridSearchCV(rf, param_grid, cv=fold, refit=True)
 
-    rf_gsf.fit(X,y)
+    rf_gsf.fit(X_train,y_train)
 
     best_parameters = rf_gsf.best_params_
     best_rf = rf_gsf.best_estimator_
@@ -295,13 +302,15 @@ dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/logistic_regression_dataset1.csv")
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/logistic_regression_dataset2.csv")
 
-train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
-train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
+# train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
 
-train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
-train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
+#TODO come back to this one
+#train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
 
-train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_random_forest_dataset1.csv")
-train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_random_forest_dataset2.csv")
+# train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
+# train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
+
+# train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_random_forest_dataset1.csv")
+# train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_random_forest_dataset2.csv")
 
 
