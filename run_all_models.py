@@ -203,7 +203,7 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path):
         "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
     }
 
-    gsc = GridSearchCV(estimator=SVC(), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+    gsc = GridSearchCV(estimator=SVC(probability=True), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
     grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
     best_params = grid_result.best_params_
     best_svm = grid_result.best_estimator_
@@ -286,14 +286,14 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 
-dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/decision_tree_dataset1.csv")
-dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/decision_tree_dataset2.csv")
+# dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/decision_tree_dataset1.csv")
+# dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/decision_tree_dataset2.csv")
 
-train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/boosting_dataset1.csv")
-train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/boosting_dataset2.csv")
+# train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/boosting_dataset1.csv")
+# train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/boosting_dataset2.csv")
 
-train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/logistic_regression_dataset1.csv")
-train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/logistic_regression_dataset2.csv")
+# train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/logistic_regression_dataset1.csv")
+# train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/logistic_regression_dataset2.csv")
 
 train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
 train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")

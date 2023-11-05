@@ -1,1 +1,2 @@
 Model,Accuracy,Precision,Recall,F-1,ROC AUC
+"SVC(degree=4, gamma=0.01, kernel='poly', probability=True)",0.9823008849557522,1.0,0.9545454545454546,0.9767441860465117,0.9990118577075099
