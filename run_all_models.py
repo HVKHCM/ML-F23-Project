@@ -299,11 +299,11 @@ dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X
 # train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
 
 #TODO come back to this one
-# train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
+train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
 
 #TODO come back to these 2
-train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
-# train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
+#train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
+#train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
 
 # train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_random_forest_dataset1.csv")
 # train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_random_forest_dataset2.csv")
