@@ -250,16 +250,10 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
     
     for test_example in X_test.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
         test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        try:
-            prediction = best_knn.predict(test_example_df)[0]
-        except:
-            print("Prediction error")
-            return None
+        prediction = best_knn.predict(test_example_df)[0]
         predictions.append(prediction)
 
-
-
-    #test_model(best_knn, predictions, X_test, y_test, output_csv_path)
+    test_model(best_knn, predictions, X_test, y_test, output_csv_path)
     
 
 #Random Forests
@@ -305,9 +299,10 @@ dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X
 # train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/svm_dataset1.csv")
 
 #TODO come back to this one
-#train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
+# train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/svm_dataset2.csv")
 
-# train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
+#TODO come back to these 2
+train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_knn_dataset1.csv")
 # train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/kfold_knn_dataset2.csv")
 
 # train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/kfold_random_forest_dataset1.csv")
