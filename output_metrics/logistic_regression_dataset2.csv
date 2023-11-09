@@ -1,2 +1,6 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-LogisticRegression(solver='liblinear'),0.75,0.5555555555555556,0.5769230769230769,0.5660377358490566,0.8082750582750582
+Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
+"LogisticRegression(penalty='l1', solver='liblinear')","[0.7608695652173914, 0.5769230769230769, 0.5769230769230769, 0.5769230769230769, 0.8047785547785549]",Model with highest accuracy
+"LogisticRegression(penalty='l1', solver='liblinear')","[0.7608695652173914, 0.5769230769230769, 0.5769230769230769, 0.5769230769230769, 0.8047785547785549]",Model with highest precision
+"LogisticRegression(penalty='l1', solver='liblinear')","[0.7608695652173914, 0.5769230769230769, 0.5769230769230769, 0.5769230769230769, 0.8047785547785549]",Model with highest recall
+"LogisticRegression(penalty='l1', solver='liblinear')","[0.7608695652173914, 0.5769230769230769, 0.5769230769230769, 0.5769230769230769, 0.8047785547785549]",Model with highest f-1 score
+LogisticRegression(solver='liblinear'),"[0.75, 0.5555555555555556, 0.5769230769230769, 0.5660377358490566, 0.8082750582750582]",Model with highest roc-auc

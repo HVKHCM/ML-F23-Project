@@ -150,8 +150,7 @@ def calculate_best_models(models_dict:dict, output_csv_path:str):
     output_csv_writer.writerow([best_f1_model, models_dict[best_f1_model], "Model with highest f-1 score"])
     output_csv_writer.writerow([best_roc_auc_model, models_dict[best_roc_auc_model], "Model with highest roc-auc"])
 
-
-
+    return best_accuracy_model
 
 
 #Decision Tree
@@ -171,27 +170,23 @@ def train_and_test_decision_tree(X_train, y_train, X_val, y_val, output_csv_path
     
                     for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
                         test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-                        prediction = dt_model.predict(test_example_df)[0]
+                        prediction = dt_model_trained.predict(test_example_df)[0]
                         predictions.append(prediction)
 
-                    accuracy, precision, recall, f1, roc_auc = test_model(model, predictions, X_val, y_val)
+                    accuracy, precision, recall, f1, roc_auc = test_model(dt_model_trained, predictions, X_val, y_val)
 
-                    model_string = str(dt_model_trained).strip()
+                    models_dict[dt_model_trained] = [accuracy, precision, recall, f1, roc_auc]
 
-                    models_dict[model_string] = [accuracy, precision, recall, f1, roc_auc]
+    dt_with_highest_accuracy = calculate_best_models(models_dict, output_csv_path)
 
-    calculate_best_models(models_dict, output_csv_path)
+    print("Done running DecisionTreeClassifier!")
 
-    
-
-                 
-    
-    print("Model tested!")
-
-    return dt
+    return dt_with_highest_accuracy
 
 #Boosting
 def train_and_test_boosting(dt, X_train, y_train, X_val, y_val, output_csv_path):
+
+    models_dict = {}
     
     bag_clf = BaggingClassifier(
     dt, n_estimators=500,
@@ -212,69 +207,68 @@ def train_and_test_boosting(dt, X_train, y_train, X_val, y_val, output_csv_path)
         prediction = bag_clf.predict(test_example_df)[0]
         predictions.append(prediction)
        
-    test_model(bag_clf, predictions, X_val, y_val, output_csv_path)
+    accuracy, precision, recall, f1, roc_auc = test_model(bag_clf, predictions, X_val, y_val)
+    models_dict[bag_clf] = [accuracy, precision, recall, f1, roc_auc]
+
+    calculate_best_models(models_dict, output_csv_path)
+
+    print("Done running BaggingClassifier!")
 
 #Logistic Regression
 def train_and_test_logistic_regression(X_train, y_train, X_val, y_val, output_csv_path):
-    
-    parameters = {
-        "penalty" : ("l1", "l2"),
-        "max_iter" : [(i * 100) for i in range (1, 11)]
-    }
 
-    gsc = GridSearchCV(estimator=LogisticRegression(solver="liblinear"), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-    grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
-    best_params = grid_result.best_params_
-    best_lr = grid_result.best_estimator_
-    best_score = grid_result.best_score_
-    
-    lr_model = best_lr.fit(X_train, y_train)
+    models_dict = {}
 
-    num_test_examples = len(X_val)
-    num_test_labels = len(y_val)
+    for penalty in ["l1", "l2"]:
+        for solver in ["liblinear"]:
+            for max_iter in [(i * 100) for i in range (1, 11)]:
 
-    assert num_test_examples == num_test_labels
-    
-    predictions = []
-    
-    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
-        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = lr_model.predict(test_example_df)[0]
-        predictions.append(prediction)
+                lr_model = LogisticRegression(penalty=penalty, solver=solver, max_iter=max_iter)
+                lr_model_trained = lr_model.fit(X_train, y_train)
 
-    test_model(lr_model, predictions, X_val, y_val, output_csv_path)
+                predictions = []
+
+                for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+                    test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+                    prediction = lr_model_trained.predict(test_example_df)[0]
+                    predictions.append(prediction)
+
+                accuracy, precision, recall, f1, roc_auc = test_model(lr_model_trained, predictions, X_val, y_val)
+
+                models_dict[lr_model_trained] = [accuracy, precision, recall, f1, roc_auc]
+
+    calculate_best_models(models_dict, output_csv_path)
+
+    print("Done running LogisticRegression!")
+
     
 #SVM
 def train_and_test_svm(X_train, y_train, X_val, y_val, output_csv_path):
     
-    parameters = {
-        "C" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
-        "kernel" : ["rbf", "linear", "poly", "sigmoid"],
-        "degree" : [1,2,3,4,5],
-        "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
-    }
+    models_dict = {}
 
-    gsc = GridSearchCV(estimator=SVC(probability=True), param_grid=parameters, cv=10, scoring="accuracy") #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-    grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
-    best_params = grid_result.best_params_
-    best_svm = grid_result.best_estimator_
-    best_score = grid_result.best_score_
+    for C in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
+        for kernel in ["rbf", "linear", "poly", "sigmoid"]:
+            for degree in [1,2,3,4,5]:
+                for gamma in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
+
+                    svm_model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma, probability=True)
+                    svm_model_trained = svm_model.fit(X_train, y_train)
     
-    svm_model = best_svm.fit(X_train, y_train)
-
-    num_test_examples = len(X_val)
-    num_test_labels = len(y_val)
-
-    assert num_test_examples == num_test_labels
+                    predictions = []
     
-    predictions = []
-    
-    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
-        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = svm_model.predict(test_example_df)[0]
-        predictions.append(prediction)
+                    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+                        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+                        prediction = svm_model_trained.predict(test_example_df)[0]
+                        predictions.append(prediction)
 
-    test_model(svm_model, predictions, X_val, y_val, output_csv_path)
+                    accuracy, precision, recall, f1, roc_auc = test_model(svm_model_trained, predictions, X_val, y_val)
+
+                    models_dict[svm_model_trained] = [accuracy, precision, recall, f1, roc_auc]
+
+    calculate_best_models(models_dict, output_csv_path)
+
+    print("Done running SVM!")
 
 #KNN
 def train_and_test_kfold_knn (X_train, y_train, X_val, y_val, output_csv_path, range_tune=[1,10],fold=10):
@@ -338,7 +332,7 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_val, y_val, output_cs
 
 dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val = process_data()
 
-dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/decision_tree_dataset1.csv")
+# dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/decision_tree_dataset1.csv")
 # dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/decision_tree_dataset2.csv")
 
 # train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/boosting_dataset1.csv")
@@ -347,7 +341,7 @@ dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, d
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/logistic_regression_dataset1.csv")
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/logistic_regression_dataset2.csv")
 
-# train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/svm_dataset1.csv")
+train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/svm_dataset1.csv")
 
 #TODO come back to this one
 #train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/svm_dataset2.csv")

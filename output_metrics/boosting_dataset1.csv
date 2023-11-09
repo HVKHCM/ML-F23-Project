@@ -1,4 +1,11 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=6,
-                                                   min_samples_split=4),
-                  max_samples=0.7, n_estimators=500, n_jobs=-1)",0.9380530973451328,0.9512195121951219,0.8863636363636364,0.9176470588235294,0.9799077733860343
+Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
+"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=3),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)","[0.9292035398230089, 0.9285714285714286, 0.8863636363636364, 0.9069767441860465, 0.9802371541501976]",Model with highest accuracy
+"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=3),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)","[0.9292035398230089, 0.9285714285714286, 0.8863636363636364, 0.9069767441860465, 0.9802371541501976]",Model with highest precision
+"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=3),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)","[0.9292035398230089, 0.9285714285714286, 0.8863636363636364, 0.9069767441860465, 0.9802371541501976]",Model with highest recall
+"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=3),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)","[0.9292035398230089, 0.9285714285714286, 0.8863636363636364, 0.9069767441860465, 0.9802371541501976]",Model with highest f-1 score
+"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=3),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)","[0.9292035398230089, 0.9285714285714286, 0.8863636363636364, 0.9069767441860465, 0.9802371541501976]",Model with highest roc-auc

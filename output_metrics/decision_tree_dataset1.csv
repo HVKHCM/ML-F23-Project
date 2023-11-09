@@ -1,2 +1,6 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-"DecisionTreeClassifier(max_depth=5, min_samples_split=4)",0.9026548672566371,0.8837209302325582,0.8636363636363636,0.8735632183908046,0.8970685111989458
+Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
+DecisionTreeClassifier(max_depth=3),"[0.9203539823008849, 0.8888888888888888, 0.9090909090909091, 0.8988764044943819, 0.9194664031620553]",Model with highest accuracy
+"DecisionTreeClassifier(max_depth=6, min_samples_leaf=4)","[0.9203539823008849, 0.9069767441860465, 0.8863636363636364, 0.896551724137931, 0.9334650856389985]",Model with highest precision
+DecisionTreeClassifier(max_depth=7),"[0.911504424778761, 0.8541666666666666, 0.9318181818181818, 0.8913043478260869, 0.9151844532279314]",Model with highest recall
+"DecisionTreeClassifier(max_depth=7, min_samples_split=4)","[0.9203539823008849, 0.8723404255319149, 0.9318181818181818, 0.9010989010989012, 0.9219367588932805]",Model with highest f-1 score
+"DecisionTreeClassifier(max_depth=6, min_samples_leaf=4)","[0.9203539823008849, 0.9069767441860465, 0.8863636363636364, 0.896551724137931, 0.9334650856389985]",Model with highest roc-auc
