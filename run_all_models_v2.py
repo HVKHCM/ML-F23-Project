@@ -272,61 +272,59 @@ def train_and_test_svm(X_train, y_train, X_val, y_val, output_csv_path):
 
 #KNN
 def train_and_test_kfold_knn (X_train, y_train, X_val, y_val, output_csv_path, range_tune=[1,10],fold=10):
-    #create new a knn model
     assert range_tune [0] < range_tune[1]
-    knn = KNeighborsClassifier()
-    #create a dictionary of all values we want to test for n_neighbors
-    param_grid = {'n_neighbors': np.arange(range_tune[0], range_tune[1])}
-    #use gridsearch to test all values for n_neighbors
-    knn_gsf = GridSearchCV(knn, param_grid, cv=fold, refit=True)
-    #fit model to data
-    knn_gsf.fit(X_train, y_train)
-
-    best_parameters = knn_gsf.best_params_
-    best_knn = knn_gsf.best_estimator_
     
-    num_test_examples = len(X_val)
-    num_test_labels = len(y_val)
+    models_dict = {}
 
-    assert num_test_examples == num_test_labels
-    
-    predictions = []
+    for n_neighbors in np.arange(range_tune[0], range_tune[1]):
 
-    
-    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
-        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = best_knn.predict(test_example_df)[0]
-        predictions.append(prediction)
+        knn_model = KNeighborsClassifier(n_neighbors=n_neighbors)
+        knn_model_trained = knn_model.fit(X_train, y_train)
 
-    test_model(best_knn, predictions, X_val, y_val, output_csv_path)
+        predictions = []
+
+        for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+            test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+            prediction = knn_model_trained.predict(test_example_df)[0]
+            predictions.append(prediction)
+
+        accuracy, precision, recall, f1, roc_auc = test_model(knn_model_trained, predictions, X_val, y_val)
+
+        models_dict[knn_model_trained] = [accuracy, precision, recall, f1, roc_auc]
+
+    calculate_best_models(models_dict, output_csv_path)
+
+    print("Done running KNeighborsClassifier!")
     
 
 #Random Forests
 def train_and_test_kfold_random_forest(X_train, y_train, X_val, y_val, output_csv_path, trees = [1,10], depth=[1,10], fold=10):
     assert trees[0] < trees[1]
     assert depth[0] < depth[1]
-    rf = RandomForestClassifier()
-    param_grid = {'n_estimators': np.arange(trees[0], trees[1]), 'max_depth': np.arange(depth[0],depth[1])}
-    rf_gsf = GridSearchCV(rf, param_grid, cv=fold, refit=True)
 
-    rf_gsf.fit(X_train,y_train)
+    models_dict = {}
 
-    best_parameters = rf_gsf.best_params_
-    best_rf = rf_gsf.best_estimator_
+    for n_estimators in np.arange(trees[0], trees[1]):
+        for max_depth in np.arange(depth[0],depth[1]):
+
+            rf_model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth)
+            rf_model_trained = rf_model.fit(X_train, y_train)
+
+            predictions = []
+
+            for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
+                test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
+                prediction = rf_model_trained.predict(test_example_df)[0]
+                predictions.append(prediction)
+
+            accuracy, precision, recall, f1, roc_auc = test_model(rf_model_trained, predictions, X_val, y_val)
+
+            models_dict[rf_model_trained] = [accuracy, precision, recall, f1, roc_auc]
     
-    num_test_examples = len(X_val)
-    num_test_labels = len(y_val)
-
-    assert num_test_examples == num_test_labels
+    calculate_best_models(models_dict, output_csv_path)
     
-    predictions = []
-    
-    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
-        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = best_rf.predict(test_example_df)[0]
-        predictions.append(prediction)
+    print("Done running RandomForestClassifier!")
 
-    test_model(best_rf, predictions, X_val, y_val, output_csv_path)
 
 
 
@@ -341,14 +339,15 @@ dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, dataset2_X_t
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/logistic_regression_dataset1.csv")
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/logistic_regression_dataset2.csv")
 
-train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/svm_dataset1.csv")
+# train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/svm_dataset1.csv")
 
 #TODO come back to this one
-#train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/svm_dataset2.csv")
+train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/svm_dataset2.csv")
 
-#TODO come back to these 2
+#TODO come back to this one
 #train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/kfold_knn_dataset1.csv")
-#train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/kfold_knn_dataset2.csv")
+
+# train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/kfold_knn_dataset2.csv")
 
 # train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_val, dataset1_y_val, "output_metrics/kfold_random_forest_dataset1.csv")
 # train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_val, dataset2_y_val, "output_metrics/kfold_random_forest_dataset2.csv")

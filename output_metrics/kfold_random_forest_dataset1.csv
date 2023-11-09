@@ -1,2 +1,6 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-"RandomForestClassifier(max_depth=6, n_estimators=8)",0.911504424778761,0.9047619047619048,0.8636363636363636,0.8837209302325582,0.9784255599472991
+Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
+"RandomForestClassifier(max_depth=5, n_estimators=3)","[0.9469026548672567, 0.9318181818181818, 0.9318181818181818, 0.9318181818181818, 0.9817193675889329]",Model with highest accuracy
+"RandomForestClassifier(max_depth=4, n_estimators=6)","[0.9469026548672567, 0.975, 0.8863636363636364, 0.9285714285714285, 0.9766139657444005]",Model with highest precision
+"RandomForestClassifier(max_depth=5, n_estimators=3)","[0.9469026548672567, 0.9318181818181818, 0.9318181818181818, 0.9318181818181818, 0.9817193675889329]",Model with highest recall
+"RandomForestClassifier(max_depth=5, n_estimators=3)","[0.9469026548672567, 0.9318181818181818, 0.9318181818181818, 0.9318181818181818, 0.9817193675889329]",Model with highest f-1 score
+"RandomForestClassifier(max_depth=6, n_estimators=8)","[0.9380530973451328, 0.9512195121951219, 0.8863636363636364, 0.9176470588235294, 0.9902832674571805]",Model with highest roc-auc
