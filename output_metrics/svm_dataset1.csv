@@ -1,6 +1,1 @@
-Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
-"SVC(C=0.001, degree=2, gamma=10.0, kernel='poly', probability=True)","[0.9823008849557522, 0.9772727272727273, 0.9772727272727273, 0.9772727272727273, 0.9980237154150198]",Model with highest accuracy
-"SVC(C=0.001, degree=1, gamma=0.1, kernel='poly', probability=True)","[0.6548672566371682, 1.0, 0.11363636363636363, 0.20408163265306123, 0.9048089591567853]",Model with highest precision
-"SVC(C=0.001, degree=2, gamma=10.0, kernel='poly', probability=True)","[0.9823008849557522, 0.9772727272727273, 0.9772727272727273, 0.9772727272727273, 0.9980237154150198]",Model with highest recall
-"SVC(C=0.001, degree=2, gamma=10.0, kernel='poly', probability=True)","[0.9823008849557522, 0.9772727272727273, 0.9772727272727273, 0.9772727272727273, 0.9980237154150198]",Model with highest f-1 score
-"SVC(C=0.01, gamma=0.1, kernel='poly', probability=True)","[0.9734513274336283, 1.0, 0.9318181818181818, 0.9647058823529412, 0.9993412384716733]",Model with highest roc-auc
+Model,Accuracy,Precision,Recall,F-1,ROC AUC

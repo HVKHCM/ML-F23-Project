@@ -1,6 +1,6 @@
-Model,"[Accuracy, Precision, Recall, F-1, ROC_AUC]",Description
-"LogisticRegression(penalty='l1', solver='liblinear')","[0.9734513274336283, 0.9767441860465116, 0.9545454545454546, 0.9655172413793104, 0.9950592885375494]",Model with highest accuracy
-LogisticRegression(solver='liblinear'),"[0.9734513274336283, 1.0, 0.9318181818181818, 0.9647058823529412, 0.9957180500658761]",Model with highest precision
-"LogisticRegression(penalty='l1', solver='liblinear')","[0.9734513274336283, 0.9767441860465116, 0.9545454545454546, 0.9655172413793104, 0.9950592885375494]",Model with highest recall
-"LogisticRegression(penalty='l1', solver='liblinear')","[0.9734513274336283, 0.9767441860465116, 0.9545454545454546, 0.9655172413793104, 0.9950592885375494]",Model with highest f-1 score
-LogisticRegression(solver='liblinear'),"[0.9734513274336283, 1.0, 0.9318181818181818, 0.9647058823529412, 0.9957180500658761]",Model with highest roc-auc
+Model,Accuracy,Precision,Recall,F-1,ROC AUC
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Model with best accuracy,Train error: 0.04185022026431717,Test error: 0.017699115044247815
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Model with best precision,Train error: 0.04185022026431717,Test error: 0.017699115044247815
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Model with best recall,Train error: 0.04185022026431717,Test error: 0.017699115044247815
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Model with best f1,Train error: 0.04185022026431717,Test error: 0.017699115044247815
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Model with best roc_auc,Train error: 0.04185022026431717,Test error: 0.017699115044247815
