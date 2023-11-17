@@ -41,10 +41,12 @@ class Net(nn.Module):
 def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, unit3_range, lr_range):
     accuracy_list = []
     all_config = []
+    count = 0
     for i in unit1_range:
         for j in unit2_range:
             for k in unit3_range:
                 for l in lr_range:
+                    print("Config: {}".format(count + 1))
                     config = []
                     config.append(i)
                     config.append(j)
@@ -55,11 +57,11 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
                     trained_model = train_model(model,epochs, loss_fun, optimizer, X_train, y_train)
                     accuracy_list.append(eval_model(trained_model, X_test, y_test))
                     all_config.append(config)
-    return (accuracy_list, all_config)
+                    count += 1
+    return accuracy_list, all_config
 
 def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
     for n in range(epochs):
-        print("epoch: {}".format(n+1))
         for x,y in zip(X_train, y_train):
             x_tensor = torch.transpose(torch.tensor(x),0,1)
             y_tensor = torch.tensor(y)
