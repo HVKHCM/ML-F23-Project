@@ -94,7 +94,9 @@ def get_train_and_test_predictions(model, X_train, y_train, X_test, y_test):
 
     return (train_predictions, test_predictions)
 
-def test_model(model, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric):
+def test_model(model, X_train, y_train, X_test, y_test):
+
+    train_predictions, test_predictions = get_train_and_test_predictions(model, X_train, y_train, X_test, y_test)
 
     accuracy = accuracy_score(y_test, test_predictions)
     test_error = 1 - accuracy
@@ -110,7 +112,7 @@ def test_model(model, train_predictions, test_predictions, X_train, y_train, X_t
     train_accuracy = accuracy_score(y_train, train_predictions) 
     train_error = 1 - train_accuracy
 
-    test_row = [model, accuracy, precision, recall, f1, roc_auc, "Model with best " + score_metric, "Train error: " + str(train_error), "Test error: " + str(test_error)]
+    test_row = [model, accuracy, precision, recall, f1, roc_auc, "Train error: " + str(train_error), "Test error: " + str(test_error)]
     
     return test_row
     
@@ -145,10 +147,8 @@ def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_pa
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
-        
-        train_predictions, test_predictions = get_train_and_test_predictions(model, X_train, y_train, X_test, y_test)
 
-        test_row = test_model(model, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+        test_row = test_model(model, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -159,23 +159,26 @@ def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_pa
 #Boosting
 def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path):
 
-    score_metric = "" #TODO need different metrics
+    output_csv_file = open(output_csv_path, 'w', newline='')
+    writer = csv.writer(output_csv_file)
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+
+    score_metric = "accuracy"
     
     bag_clf = BaggingClassifier(
     dt, n_estimators=500,
     max_samples=0.7, bootstrap=True, n_jobs=-1)  #Sampled with replecement. Each sample is 70% of the whole data. 500 DT trained
     
     bag_clf.fit(X_train, y_train)
-    y_pred = bag_clf.predict(X_test)
     
     num_test_examples = len(X_test)
     num_test_labels = len(y_test)
 
     assert num_test_examples == num_test_labels
-    
-    train_predictions, test_predictions = get_train_and_test_predictions(bag_clf, X_train, y_train, X_test, y_test)
        
-    test_row = test_model(bag_clf, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+    test_row = test_model(bag_clf, X_train, y_train, X_test, y_test)
+
+    writer.writerow(test_row)
     
 
 #Logistic Regression
@@ -205,10 +208,8 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
-        
-        train_predictions, test_predictions = get_train_and_test_predictions(lr_model, X_train, y_train, X_test, y_test)
 
-        test_row = test_model(lr_model, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+        test_row = test_model(lr_model, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -244,10 +245,8 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
-        
-        train_predictions, test_predictions = get_train_and_test_predictions(svm_model, X_train, y_train, X_test, y_test)
 
-        test_row = test_model(svm_model, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+        test_row = test_model(svm_model, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -283,10 +282,8 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
-        
-        train_predictions, test_predictions = get_train_and_test_predictions(knn_gsf, X_train, y_train, X_test, y_test)
 
-        test_row = test_model(knn_gsf, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+        test_row = test_model(knn_gsf, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -321,10 +318,8 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
-        
-        train_predictions, test_predictions = get_train_and_test_predictions(rf_gsf, X_train, y_train, X_test, y_test)
 
-        test_row = test_model(rf_gsf, train_predictions, test_predictions, X_train, y_train, X_test, y_test, score_metric)
+        test_row = test_model(rf_gsf, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -336,24 +331,24 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 score_metrics = ["accuracy"]
 
-# dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
-# dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
+dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
+dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
+train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv")
+train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv")
 
-# train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv")
-# train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv")
+train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_logistic_regression_dataset1.csv", score_metrics)
+train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)
 
-# train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_random_forest_dataset1.csv", score_metrics)
-# train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_random_forest_dataset2.csv", score_metrics)
-
-# train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_logistic_regression_dataset1.csv", score_metrics)
-# train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)
-
+#TODO Caroline can't run these
 # train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_svm_dataset1.csv", score_metrics)
 # train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_svm_dataset2.csv", score_metrics)
 
+#TODO Caroline can't run these
 # train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_knn_dataset1.csv", score_metrics)
 # train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_knn_dataset2.csv", score_metrics)
 
+train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_random_forest_dataset1.csv", score_metrics)
+train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_random_forest_dataset2.csv", score_metrics)
 
 
 

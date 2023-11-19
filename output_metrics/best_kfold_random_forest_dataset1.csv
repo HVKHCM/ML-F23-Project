@@ -1,0 +1,5 @@
+Model,Accuracy,Precision,Recall,F-1,ROC AUC
+"GridSearchCV(cv=10, estimator=RandomForestClassifier(),
+             param_grid={'max_depth': array([1, 2, 3, 4, 5, 6, 7, 8, 9]),
+                         'n_estimators': array([1, 2, 3, 4, 5, 6, 7, 8, 9])},
+             scoring='accuracy')",0.9557522123893806,0.9743589743589743,0.9047619047619048,0.9382716049382716,0.9921193829644535,Train error: 0.008810572687224627,Test error: 0.04424778761061943
