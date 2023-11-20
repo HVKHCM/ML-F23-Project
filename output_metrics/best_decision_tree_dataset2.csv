@@ -1,2 +1,2 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-"DecisionTreeClassifier(max_depth=3, min_samples_leaf=2, min_samples_split=3)",0.6593406593406593,0.5,0.41935483870967744,0.45614035087719296,0.6260752688172043,Train error: 0.20054200542005418,Test error: 0.34065934065934067
+Model,Accuracy,Precision,Recall,F-1,ROC AUC,Train Error,Test Error
+"DecisionTreeClassifier(max_depth=3, min_samples_leaf=3, min_samples_split=4)",0.6593406593406593,0.5,0.41935483870967744,0.45614035087719296,0.6260752688172043,0.20054200542005418,0.34065934065934067

@@ -163,14 +163,14 @@ def bias_variance_kfold_random_forest(X_train, y_train, X_test, y_test, output_c
 
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 
-# dt_dataset1 = bias_variance_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/decision_tree_dataset1.csv")
-# dt_dataset2 = bias_variance_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/decision_tree_dataset2.csv")
+dt_dataset1 = bias_variance_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/decision_tree_dataset1.csv")
+dt_dataset2 = bias_variance_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/decision_tree_dataset2.csv")
 
 # train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/best_boosting_dataset1.csv")
 # train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/best_boosting_dataset2.csv")
 
-# bias_variance_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/logistic_regression_dataset1.csv")
-# bias_variance_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/logistic_regression_dataset2.csv")
+bias_variance_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/logistic_regression_dataset1.csv")
+bias_variance_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/logistic_regression_dataset2.csv")
 
 #TODO Caroline can't run these
 # bias_variance_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/svm_dataset1.csv")

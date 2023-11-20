@@ -112,7 +112,7 @@ def test_model(model, X_train, y_train, X_test, y_test):
     train_accuracy = accuracy_score(y_train, train_predictions) 
     train_error = 1 - train_accuracy
 
-    test_row = [model, accuracy, precision, recall, f1, roc_auc, "Train error: " + str(train_error), "Test error: " + str(test_error)]
+    test_row = [model, accuracy, precision, recall, f1, roc_auc, str(train_error), str(test_error)]
     
     return test_row
     
@@ -124,7 +124,7 @@ def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_pa
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     dt_best_accuracy = DecisionTreeClassifier()
     test_rows = []
@@ -161,7 +161,7 @@ def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_pat
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     score_metric = "accuracy"
     
@@ -186,7 +186,7 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     test_rows = []
     
@@ -220,7 +220,7 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     test_rows = []
 
@@ -258,7 +258,7 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     test_rows = []
 
@@ -296,7 +296,7 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     test_rows = []
 

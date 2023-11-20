@@ -1,2 +1,2 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
-"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,Train error: 0.04185022026431717,Test error: 0.017699115044247815
+Model,Accuracy,Precision,Recall,F-1,ROC AUC,Train Error,Test Error
+"LogisticRegression(penalty='l1', solver='liblinear')",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9976525821596244,0.04185022026431717,0.017699115044247815
