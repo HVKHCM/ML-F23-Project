@@ -210,6 +210,12 @@ def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:s
 # logistic_regression_dataset2_csv = "bias_variance_comparisons/logistic_regression_dataset2.csv"
 # plot_logistic_regression_errors(logistic_regression_dataset2_csv, "Dataset 2")
 
+#svm_dataset1_csv = "bias_variance_comparisons/svm_dataset1.csv"
+#plot_svm_errors(svm_dataset1_csv, "Dataset 1")
+
+#svm_dataset2_csv = "bias_variance_comparisons/svm_dataset2.csv"
+#plot_svm_errors(svm_dataset2_csv, "Dataset 2")
+
 # kfold_random_forest_dataset1_csv = "bias_variance_comparisons/kfold_random_forest_dataset1.csv"
 # plot_kfold_random_forest_errors(kfold_random_forest_dataset1_csv, "Dataset 1")
 
