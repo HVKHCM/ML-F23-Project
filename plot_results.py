@@ -114,7 +114,46 @@ def plot_logistic_regression_errors(logistic_regression_csv_path, dataset_name:s
     plot_train_and_test_errors("Logistic Regression " + dataset_name, model_attributes_dict, training_errors, testing_errors)
 
 def plot_svm_errors(svm_csv_path, dataset_name:str):
-    pass
+    svm_csv_file = open(svm_csv_path, newline='')
+    csvreader = csv.reader(svm_csv_file)
+
+    #get values for the different model attributes to be tested
+    C = []
+    kernel = []
+    gamma = []
+
+    training_errors = []
+    testing_errors = []
+
+    first_row = True 
+
+    for row in csvreader:
+
+        if first_row == True:
+            first_row = False
+            continue #skip the first row since it contains names of attributes
+
+        train_error = float(row[6])
+        test_error = float(row[7])
+
+        C_ = float(row[8])
+        kernel_ = str(row[9])
+        gamma_ = float(row[10])
+
+        training_errors.append(train_error)
+        testing_errors.append(test_error)
+
+        C.append(C_)
+        kernel.append(kernel_)
+        gamma.append(gamma_)
+
+    model_attributes_dict = {}
+    model_attributes_dict ["C"] = C
+    model_attributes_dict ["Kernel"] = kernel
+    model_attributes_dict ["Gamma"] = gamma
+
+    plot_train_and_test_errors("SVM " + dataset_name, model_attributes_dict, training_errors, testing_errors)
+
 
 def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
     pass
