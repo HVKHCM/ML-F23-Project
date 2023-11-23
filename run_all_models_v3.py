@@ -226,8 +226,7 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
 
     parameters = {
         "C" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
-        "kernel" : ["rbf", "linear", "poly", "sigmoid"],
-        "degree" : [1,2,3,4,5],
+        "kernel" : ["rbf", "linear", "sigmoid"],
         "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
     }
 
