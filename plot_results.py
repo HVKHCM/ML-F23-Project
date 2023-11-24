@@ -181,7 +181,9 @@ def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
         n_neighbors_list.append(n_neighbors)
 
         model_attributes_dict = {}
-        modeL_attributes_dict["Number of Neighbors"]
+        modeL_attributes_dict["Number of Neighbors"] = n_neighbors
+
+        plot_train_and_test_errors("K-Fold KNN " + dataset_name, model_attributes_dict, training_errors, testing_errors)
 
 
 
