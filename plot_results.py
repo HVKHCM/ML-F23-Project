@@ -156,7 +156,34 @@ def plot_svm_errors(svm_csv_path, dataset_name:str):
 
 
 def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
-    pass
+    kfold_random_forest_csv_file = open(kfold_random_forest_csv_path, newline='')
+    csvreader = csv.reader(kfold_random_forest_csv_file)
+
+    n_neighbors_list = []
+
+    training_errors = []
+    testing_errors = []
+
+    for row in csvreader:
+
+        if first_row == True:
+            first_row = False
+            continue #skip the first row since it contains names of attributes
+
+        train_error = float(row[6])
+        test_error = float(row[7])
+
+        n_neighbors = int(row([8]))
+
+        training_errors.append(train_error)
+        testing_errors.append(test_error)
+
+        n_neighbors_list.append(n_neighbors)
+
+        model_attributes_dict = {}
+        modeL_attributes_dict["Number of Neighbors"]
+
+
 
 def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:str):
     kfold_random_forest_csv_file = open(kfold_random_forest_csv_path, newline='')
