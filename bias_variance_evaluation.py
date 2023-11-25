@@ -41,31 +41,20 @@ def bias_variance_decision_tree(X_train, y_train, X_test, y_test, output_csv_pat
 #Boosting
 def bias_variance_boosting(dt, X_train, y_train, X_val, y_val, output_csv_path):
 
-    models_dict = {}
-    
-    bag_clf = BaggingClassifier(
-    dt, n_estimators=500,
-    max_samples=0.7, bootstrap=True, n_jobs=-1)  #Sampled with replecement. Each sample is 70% of the whole data. 500 DT trained
-    
-    bag_clf.fit(X_train, y_train)
-    y_pred = bag_clf.predict(X_val)
-    
-    num_test_examples = len(X_val)
-    num_test_labels = len(y_val)
+    output_csv_file = open(output_csv_path, 'w', newline='')
+    writer = csv.writer(output_csv_file)
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "n_estimators", "max_samples"])
 
-    assert num_test_examples == num_test_labels
-    
-    predictions = []
-    
-    for test_example in X_val.iterrows(): #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.iterrows.html#pandas.DataFrame.iterrows
-        test_example_df = pd.DataFrame(test_example[1]).T #get each row of the df separately
-        prediction = bag_clf.predict(test_example_df)[0]
-        predictions.append(prediction)
-       
-    accuracy, precision, recall, f1, roc_auc = test_model(bag_clf, predictions, X_val, y_val)
-    models_dict[bag_clf] = [accuracy, precision, recall, f1, roc_auc]
+    for n_estimators in [10,50,100,500]:
+        for max_samples in [0.5,0.6,0.7,0.8]: 
+            bag_model = BaggingClassifier( dt, n_estimators=n_estimators,max_samples=max_samples, bootstrap=True, n_jobs=-1)
+            bag_model_trained = bag_model.fit(X_train, y_train)
 
-    calculate_best_models(models_dict, output_csv_path)
+            test_row = test_model(bag_model_trained, X_train, y_train, X_test, y_test)
+            test_row = test_row + [n_estimators, max_samples]
+
+            writer.writerow(test_row)
+
 
     print("Done running BaggingClassifier!")
 
