@@ -1,0 +1,65 @@
+Model,Accuracy,Precision,Recall,F1,ROC_AUC,Train Error,Test Error,n_estimators,max_samples
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.5, n_jobs=-1)",0.6813186813186813,0.5454545454545454,0.3870967741935484,0.45283018867924524,0.7064516129032258,0.19783197831978316,0.31868131868131866,10,0.5
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.6, n_jobs=-1)",0.6813186813186813,0.5384615384615384,0.45161290322580644,0.4912280701754386,0.667741935483871,0.20867208672086723,0.31868131868131866,10,0.6
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.7, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6790322580645162,0.1869918699186992,0.34065934065934067,10,0.7
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.8, n_jobs=-1)",0.6703296703296703,0.52,0.41935483870967744,0.46428571428571425,0.682258064516129,0.20596205962059622,0.3296703296703297,10,0.8
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.5, n_estimators=50, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6935483870967742,0.21138211382113825,0.34065934065934067,50,0.5
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.6, n_estimators=50, n_jobs=-1)",0.6263736263736264,0.44,0.3548387096774194,0.3928571428571428,0.693010752688172,0.20054200542005418,0.37362637362637363,50,0.6
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.7, n_estimators=50, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6956989247311828,0.18970189701897022,0.34065934065934067,50,0.7
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.8, n_estimators=50, n_jobs=-1)",0.6483516483516484,0.48,0.3870967741935484,0.42857142857142855,0.678494623655914,0.20054200542005418,0.3516483516483516,50,0.8
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.5, n_estimators=100, n_jobs=-1)",0.6593406593406593,0.5,0.3548387096774194,0.41509433962264153,0.7069892473118279,0.20054200542005418,0.34065934065934067,100,0.5
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.6, n_estimators=100, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6956989247311828,0.19783197831978316,0.34065934065934067,100,0.6
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.7, n_estimators=100, n_jobs=-1)",0.6483516483516484,0.4782608695652174,0.3548387096774194,0.40740740740740744,0.6790322580645161,0.20867208672086723,0.3516483516483516,100,0.7
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.8, n_estimators=100, n_jobs=-1)",0.6483516483516484,0.48,0.3870967741935484,0.42857142857142855,0.6908602150537634,0.19512195121951215,0.3516483516483516,100,0.8
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.5, n_estimators=500, n_jobs=-1)",0.6703296703296703,0.5217391304347826,0.3870967741935484,0.4444444444444444,0.706989247311828,0.19783197831978316,0.3296703296703297,500,0.5
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.6, n_estimators=500, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6935483870967742,0.19241192411924124,0.34065934065934067,500,0.6
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.7, n_estimators=500, n_jobs=-1)",0.6373626373626373,0.4583333333333333,0.3548387096774194,0.39999999999999997,0.6860215053763441,0.19783197831978316,0.3626373626373627,500,0.7
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=3,
+                                                        min_samples_leaf=4,
+                                                        min_samples_split=4),
+                  max_samples=0.8, n_estimators=500, n_jobs=-1)",0.6593406593406593,0.5,0.3870967741935484,0.43636363636363634,0.6870967741935484,0.19512195121951215,0.34065934065934067,500,0.8
