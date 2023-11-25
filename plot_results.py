@@ -74,7 +74,42 @@ def plot_decision_tree_errors(decision_trees_csv_path, dataset_name:str):
 
 
 def plot_boosting_errors(boosting_csv_path, dataset_name:str):
-    pass
+    boosting_csv_file = open(boosting_csv_path, newline='')
+    csvreader = csv.reader(boosting_csv_file)
+
+    #get values for the different model attributes to be tested
+    N_estimators = []
+    Max_samples = []
+
+    training_errors = []
+    testing_errors = []
+
+    first_row = True 
+
+    for row in csvreader:
+
+        if first_row == True:
+            first_row = False
+            continue #skip the first row since it contains names of attributes
+
+        train_error = float(row[6])
+        test_error = float(row[7])
+
+        N_estimators_ = float(row[8])
+        Max_samples_ = float(row[9])
+
+        training_errors.append(train_error)
+        testing_errors.append(test_error)
+
+        N_estimators.append(N_estimators_)
+        Max_samples.append(Max_samples_)
+
+    model_attributes_dict = {}
+    model_attributes_dict ["N_estimators"] = N_estimators
+    model_attributes_dict ["Max_samples"] = Max_samples
+
+    plot_train_and_test_errors("Boosting" + dataset_name, model_attributes_dict, training_errors, testing_errors)
+
 
 def plot_logistic_regression_errors(logistic_regression_csv_path, dataset_name:str):
     logistic_regression_csv_file = open(logistic_regression_csv_path, newline='')
@@ -232,6 +267,12 @@ def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:s
 
 # decision_tree_dataset2_csv = "bias_variance_comparisons/decision_tree_dataset2.csv"
 # plot_decision_tree_errors(decision_tree_dataset2_csv, "Dataset 2")
+
+#boosting_dataset1_csv = "bias_variance_comparisons/best_boosting_dataset1.csv"
+#plot_boosting_errors(boosting_dataset1_csv, "Dataset 1")
+
+#boosting_dataset2_csv = "bias_variance_comparisons/best_boosting_dataset2.csv"
+#plot_boosting_errors(boosting_dataset2_csv, "Dataset 2")
 
 # logistic_regression_dataset1_csv = "bias_variance_comparisons/logistic_regression_dataset1.csv"
 # plot_logistic_regression_errors(logistic_regression_dataset1_csv, "Dataset 1")
