@@ -2,6 +2,22 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from mlxtend.evaluate import bias_variance_decomp
+import pandas as pd
+
+def get_bias_variance(model, X_train, y_train, X_test, y_test):
+    X_train_for_bv = pd.DataFrame.from_records(X_train)
+    y_train_for_bv = pd.DataFrame.from_records(y_train)
+    X_test_for_bv = pd.DataFrame.from_records(X_test)
+    y_test_for_bv = pd.DataFrame(y_test)
+    X_train = X_train_for_bv.values
+    y_train = y_train_for_bv.values
+    X_test = X_test_for_bv.values
+    y_test = y_test_for_bv.values
+    _, bias, var = bias_variance_decomp(model, X_train, y_train, X_test, y_test, '0-1_loss', random_seed=1)
+    return bias, var
+
+
 
 def generate_model():
     model = nn.Sequential(
@@ -38,8 +54,11 @@ class Net(nn.Module):
         
         return F.softmax(self.layers["output"](x))
 
+
 def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, unit3_range, lr_range):
     accuracy_list = []
+    #bias_list = []
+    #var_list = []
     all_config = []
     count = 0
     for i in unit1_range:
@@ -56,6 +75,9 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
                     optimizer = optim.SGD(model.parameters(), lr=l)
                     trained_model = train_model(model,epochs, loss_fun, optimizer, X_train, y_train)
                     accuracy_list.append(eval_model(trained_model, X_test, y_test))
+                    #bias, variance = get_bias_variance(model, X_train, y_train, X_test, y_test)
+                    #bias_list.append(bias)
+                    #var_list.append(variance)
                     all_config.append(config)
                     count += 1
     return accuracy_list, all_config
@@ -83,4 +105,4 @@ def eval_model(model, X_test, y_test):
         if (prediction[i] == y_test[i]):
             correct += 1
     acc = float(correct/len(prediction))
-    return acc
+    return acc, prediction
