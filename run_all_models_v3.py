@@ -342,8 +342,9 @@ score_metrics = ["accuracy"]
 
 dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
 dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
-train_and_test_boosting(dt_dataset1, dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv", score_metrics)
-train_and_test_boosting(dt_dataset2, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv", score_metrics)
+
+train_and_test_boosting(DecisionTreeClassifier(max_depth=5), dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv", score_metrics)
+train_and_test_boosting(DecisionTreeClassifier(max_depth=3, min_samples_split=4), dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv", score_metrics)
 
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_logistic_regression_dataset1.csv", score_metrics)
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)
