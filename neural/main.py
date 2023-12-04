@@ -43,7 +43,7 @@ loss_fn = nn.CrossEntropyLoss()
 #num_epochs = 2
 #optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-accuracy_list, bias_list, var_list, configuration_list = utils.unit_optimize(epochs=epoch, loss_fun=loss_fn,X_train=X_train, y_train=y_train, 
+train_error, accuracy_list,configuration_list = utils.unit_optimize(epochs=epoch, loss_fun=loss_fn,X_train=X_train, y_train=y_train, 
                                    X_test=X_test, y_test=y_test, unit1_range=unit1, unit2_range=unit2, unit3_range=unit3, lr_range=lr)
 
 hidden1 = []
@@ -60,10 +60,10 @@ for i in range(len(configuration_list)):
     learning_rate.append(configuration_list[i][3])
 
 
-data_bk = pd.DataFrame(list(zip(configuration_list, accuracy_list, bias_list, var_list)),columns=['Configuration','Accuracy', 'Bias', 'Variance'])
+data_bk = pd.DataFrame(list(zip(configuration_list, accuracy_list, train_error)),columns=['Configuration','Accuracy', 'Train Error'])
 data_bk.to_csv("backup.csv", index=False)
-data_real = pd.DataFrame(list(zip(epochs, hidden1,hidden2,hidden3,learning_rate, accuracy_list, bias_list, var_list)),columns=['Number of epochs','First Unit', 'Second Unit', 'Third Unit', 
-                                                                                                  'Learning Rate', 'Accuracy', 'Bias', 'Variance'])
+data_real = pd.DataFrame(list(zip(epochs, hidden1,hidden2,hidden3,learning_rate, accuracy_list, train_error)),columns=['Number of epochs','First Unit', 'Second Unit', 'Third Unit', 
+                                                                                                  'Learning Rate', 'Accuracy', 'Train Error'])
 data_real.to_csv("data.csv", index=False)
 
 #trained_model = utils.train_model(model, num_epochs, loss_fn, optimizer, X_train, y_train)

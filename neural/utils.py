@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from mlxtend.evaluate import bias_variance_decomp
 import pandas as pd
+import numpy as np
 
 def get_bias_variance(model, X_train, y_train, X_test, y_test):
     X_train_for_bv = pd.DataFrame.from_records(X_train)
@@ -60,6 +61,7 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
     #bias_list = []
     #var_list = []
     all_config = []
+    train_error = []
     count = 0
     for i in unit1_range:
         for j in unit2_range:
@@ -75,12 +77,13 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
                     optimizer = optim.SGD(model.parameters(), lr=l)
                     trained_model = train_model(model,epochs, loss_fun, optimizer, X_train, y_train)
                     accuracy_list.append(eval_model(trained_model, X_test, y_test))
+                    train_error.append(eval_model_train(trained_model, X_train, y_train))
                     #bias, variance = get_bias_variance(model, X_train, y_train, X_test, y_test)
                     #bias_list.append(bias)
                     #var_list.append(variance)
                     all_config.append(config)
                     count += 1
-    return accuracy_list, all_config
+    return train_error, accuracy_list, all_config
 
 def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
     for n in range(epochs):
@@ -94,6 +97,19 @@ def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
             optimizer.step()
     return model
 
+def eval_model_train(model, X_test, y_test):
+    model.eval()
+    prediction = []
+    for x,y in zip(X_test, y_test): 
+        x_tensor = torch.transpose(torch.tensor(x),0,1)
+        prediction.append(torch.argmax(model(x_tensor)).tolist())
+    correct = 0
+    for i in range(len(prediction)):
+        if (prediction[i] == np.argmax(y_test[i])):
+            correct += 1
+    acc = float(correct/len(prediction))
+    return acc
+
 def eval_model(model, X_test, y_test):
     model.eval()
     prediction = []
@@ -105,4 +121,4 @@ def eval_model(model, X_test, y_test):
         if (prediction[i] == y_test[i]):
             correct += 1
     acc = float(correct/len(prediction))
-    return acc, prediction
+    return acc
