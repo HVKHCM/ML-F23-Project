@@ -5,6 +5,7 @@ import utils
 import pandas as pd
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import cv2
 
 # Importing the necessary libraries 
 import numpy as np 
@@ -36,19 +37,37 @@ train_loader = torch.utils.data.DataLoader(
     train_dataset, batch_size=256) 
 test_loader = torch.utils.data.DataLoader( 
     test_dataset, batch_size=256) 
+
+#originalImage = list(test_loader)[-1][0][0]
+#originalImage2 = list(test_loader)[-1][0][1]
+#print(originalImage2)
+#print(originalImage - originalImage2)
+
+#originalImageRaw = list(test_loader)[-1][0][0]
+#originalImage = originalImageRaw.reshape(-1,28*28)
+#print(originalImageRaw.shape)
+#print(originalImage.shape)
+#noise = cv2.GaussianBlur(np.squeeze(originalImageRaw.numpy()), (9,9), 1)
+#noiseExp = np.expand_dims(noise, axis=0)
+#noiseTensor = torch.Tensor(noiseExp)
+#print(noiseTensor.shape)
+#plt.imshow(noise, cmap='gray')
+#plt.show()
+#plt.imshow(noise - np.squeeze(originalImageRaw.numpy()), cmap='gray')
+#plt.show()
   
 # Printing 25 random images from the training dataset 
-random_samples = np.random.randint( 
-    1, len(train_dataset), (25)) 
+#random_samples = np.random.randint( 
+#    1, len(train_dataset), (25)) 
   
-for idx in range(random_samples.shape[0]): 
-    plt.subplot(5, 5, idx + 1) 
-    plt.imshow(train_dataset[idx][0][0].numpy(), cmap='gray') 
-    plt.title(train_dataset[idx][1]) 
-    plt.axis('off') 
+#for idx in range(random_samples.shape[0]): 
+#    plt.subplot(5, 5, idx + 1) 
+#    plt.imshow(train_dataset[idx][0][0].numpy(), cmap='gray') 
+#    plt.title(train_dataset[idx][1]) 
+#    plt.axis('off') 
   
-plt.tight_layout() 
-plt.show() 
+#plt.tight_layout() 
+#plt.show() 
 
 model = utils.generate_model() 
 criterion = nn.MSELoss() 
@@ -122,47 +141,48 @@ counter = 1
 epochs_list = [1, 5, 10, 50, 100] 
   
 # Iterating over specified epochs 
-for val in epochs_list: 
+#for val in epochs_list: 
     
       # Extracting recorded information 
-    temp = outputs[val]['out'].detach().numpy() 
-    title_text = f"Epoch = {val}"
+#    temp = outputs[val]['out'].detach().numpy() 
+#    title_text = f"Epoch = {val}"
       
     # Plotting first five images of the last batch 
-    for idx in range(5): 
-        plt.subplot(7, 5, counter) 
-        plt.title(title_text) 
-        plt.imshow(temp[idx].reshape(28,28), cmap= 'gray') 
-        plt.axis('off') 
+#    for idx in range(5): 
+#        plt.subplot(7, 5, counter) 
+#        plt.title(title_text) 
+#        plt.imshow(temp[idx].reshape(28,28), cmap= 'gray') 
+#        plt.axis('off') 
           
         # Incrementing the subplot counter 
-        counter+=1
+#        counter+=1
   
 # Plotting original images 
   
 # Iterating over first five 
 # images of the last batch 
-for idx in range(5): 
+#for idx in range(5): 
       
     # Obtaining image from the dictionary 
-    val = outputs[10]['img'] 
+#    val = outputs[10]['img'] 
       
     # Plotting image 
-    plt.subplot(7,5,counter) 
-    plt.imshow(val[idx].reshape(28, 28), 
-               cmap = 'gray') 
-    plt.title("Original Image") 
-    plt.axis('off') 
+#    plt.subplot(7,5,counter) 
+#    plt.imshow(val[idx].reshape(28, 28), 
+#               cmap = 'gray') 
+#    plt.title("Original Image") 
+#    plt.axis('off') 
       
     # Incrementing subplot counter 
-    counter+=1
+#    counter+=1
   
-plt.tight_layout() 
-plt.show()
+#plt.tight_layout() 
+#plt.show()
 
 # Dictionary that will store the different 
 # images and outputs for various epochs 
 outputs = {} 
+
   
 # Extracting the last batch from the test  
 # dataset 
@@ -209,3 +229,80 @@ for idx in range(10):
   
 plt.tight_layout() 
 plt.show() 
+
+originalImageRaw = list(test_loader)[-1][0][0]
+originalImage = originalImageRaw.reshape(-1,28*28)
+out1 = model(originalImage)
+out1Img = out1.detach().numpy()
+out1up = out1Img.reshape(28,28)
+noise = cv2.GaussianBlur(np.squeeze(originalImageRaw.numpy()), (19,19), 5)
+noiseExtract = noise - np.squeeze(originalImageRaw.numpy())
+print(noiseExtract)
+phiRange = np.arange(0.0,1.01,0.01)
+
+inputAdv = []
+outputAdv = []
+distance = []
+for phi in phiRange:
+    adv = np.squeeze(originalImageRaw.numpy()) + phi*noiseExtract
+    noiseExp = np.expand_dims(adv, axis=0)
+    noiseTensor = torch.Tensor(noiseExp)
+    noiseImg = noiseTensor.reshape(-1,28*28)
+    out2 = model(noiseImg)
+    out2Img = out2.detach().numpy()
+    toInpPlot = noiseImg.reshape(28,28)
+    toOutPlot = out2Img.reshape(28,28)
+    inputAdv.append(toInpPlot)
+    outputAdv.append(toOutPlot)
+    distance.append(utils.simp_norm(toOutPlot, out1up))
+
+plt.scatter(phiRange, distance)
+plt.show()
+
+review = [0, 9, 19, 29, 39, 49, 59, 69, 79, 89]
+
+# Initializing subplot counter 
+counter = 1
+#val = outputs['out'].detach().numpy() 
+  
+# Plotting first 10 images of the batch 
+for idx in review: 
+    print(phiRange[idx])
+    plt.subplot(2, 10, counter) 
+    plt.title("RI \n phi={}".format(phiRange[idx])) 
+    plt.imshow(outputAdv[idx], cmap='gray') 
+    plt.axis('off') 
+  
+    # Incrementing subplot counter 
+    counter += 1
+  
+# Plotting original images 
+  
+# Plotting first 10 images 
+for idx in review: 
+    plt.subplot(2, 10, counter) 
+    plt.imshow(inputAdv[idx], cmap='gray') 
+    plt.title("OI") 
+    plt.axis('off') 
+  
+    # Incrementing subplot counter 
+    counter += 1
+  
+plt.tight_layout() 
+plt.show() 
+
+
+#noiseExp = np.expand_dims(noise, axis=0)
+#noiseTensor = torch.Tensor(noiseExp)
+#noiseImg = noiseTensor.reshape(-1,28*28)
+
+#out2 = model(noiseImg)
+#out2Img = out2.detach().numpy()
+#plt.imshow(originalImage.reshape(28,28), cmap='gray')
+#plt.show()
+#plt.imshow(out1Img.reshape(28,28), cmap='gray')
+#plt.show()
+#plt.imshow(noiseImg.reshape(28,28),cmap='gray')
+#plt.show()
+#plt.imshow(out2Img.reshape(28,28), cmap='gray')
+#plt.show()
