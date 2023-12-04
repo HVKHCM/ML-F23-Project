@@ -202,6 +202,7 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_
     
     parameters = {
         "penalty" : ("l1", "l2"),
+        "C" : [1.0, 10, 100, 1000, 10000],
         "max_iter" : [(i * 100) for i in range (1, 11)]
     }
 
@@ -236,7 +237,8 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
 
     parameters = {
         "C" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
-        "kernel" : ["rbf", "linear", "sigmoid"],
+        "kernel" : ["rbf", "linear", "sigmoid", "poly"],
+        "degree" : [2, 3, 4],
         "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
     }
 
@@ -292,7 +294,7 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
 
         assert num_test_examples == num_test_labels
 
-        test_row = test_model(knn_gsf, X_train, y_train, X_test, y_test)
+        test_row = test_model(best_knn, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -322,13 +324,15 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 
         best_parameters = rf_gsf.best_params_
         best_rf = rf_gsf.best_estimator_
-        
+
+        rf_model = best_rf.fit(X_train, y_train)
+
         num_test_examples = len(X_test)
         num_test_labels = len(y_test)
 
         assert num_test_examples == num_test_labels
 
-        test_row = test_model(rf_gsf, X_train, y_train, X_test, y_test)
+        test_row = test_model(best_rf, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
     for row in test_rows:
@@ -340,11 +344,11 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 score_metrics = ["accuracy"]
 
-dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
-dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
+# dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
+# dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
 
-train_and_test_boosting(DecisionTreeClassifier(max_depth=5), dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv", score_metrics)
-train_and_test_boosting(DecisionTreeClassifier(max_depth=3, min_samples_split=4), dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv", score_metrics)
+# train_and_test_boosting(DecisionTreeClassifier(max_depth=5), dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_boosting_dataset1.csv", score_metrics)
+# train_and_test_boosting(DecisionTreeClassifier(max_depth=3, min_samples_split=4), dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_boosting_dataset2.csv", score_metrics)
 
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_logistic_regression_dataset1.csv", score_metrics)
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)

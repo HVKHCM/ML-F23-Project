@@ -63,21 +63,22 @@ def bias_variance_logistic_regression(X_train, y_train, X_test, y_test, output_c
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
-    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "penalty", "max_iter"])
+    writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "penalty", "C", "max_iter"])
 
     models_dict = {}
 
     for penalty in ["l1", "l2"]:
-        for solver in ["liblinear"]:
-            for max_iter in [(i * 100) for i in range (1, 11)]:
+        for C in [1.0, 10, 100, 1000, 10000]:
+            for solver in ["liblinear"]:
+                for max_iter in [(i * 100) for i in range (1, 11)]:
 
-                lr_model = LogisticRegression(penalty=penalty, solver=solver, max_iter=max_iter)
-                lr_model_trained = lr_model.fit(X_train, y_train)
+                    lr_model = LogisticRegression(penalty=penalty, C=C, solver=solver, max_iter=max_iter)
+                    lr_model_trained = lr_model.fit(X_train, y_train)
 
-                test_row = test_model(lr_model_trained, X_train, y_train, X_test, y_test)
-                test_row = test_row + [penalty, max_iter]
+                    test_row = test_model(lr_model_trained, X_train, y_train, X_test, y_test)
+                    test_row = test_row + [penalty, C, max_iter]
 
-                writer.writerow(test_row)
+                    writer.writerow(test_row)
 
 
     print("Done running LogisticRegression!")
@@ -91,10 +92,11 @@ def bias_variance_svm(X_train, y_train, X_test, y_test, output_csv_path):
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "C", "kernel", "degree", "gamma"])
 
     for C in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
-        for kernel in ["rbf", "linear", "sigmoid"]:
+        for kernel in ["rbf", "linear", "sigmoid", "poly"]:
+            for degree in [2,3,4]:
                 for gamma in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
 
-                    svm_model = SVC(C=C, kernel=kernel, gamma=gamma, probability=True)
+                    svm_model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma, probability=True)
                     svm_model_trained = svm_model.fit(X_train, y_train)
     
                     test_row = test_model(svm_model_trained, X_train, y_train, X_test, y_test)
@@ -151,11 +153,11 @@ def bias_variance_kfold_random_forest(X_train, y_train, X_test, y_test, output_c
 
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
 
-dt_dataset1 = bias_variance_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/decision_tree_dataset1.csv")
-dt_dataset2 = bias_variance_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/decision_tree_dataset2.csv")
+# dt_dataset1 = bias_variance_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/decision_tree_dataset1.csv")
+# dt_dataset2 = bias_variance_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/decision_tree_dataset2.csv")
 
-bias_variance_boosting(DecisionTreeClassifier(max_depth=5), dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/boosting_dataset1.csv")
-bias_variance_boosting(DecisionTreeClassifier(max_depth=3, min_samples_split=4), dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/boosting_dataset2.csv")
+# bias_variance_boosting(DecisionTreeClassifier(max_depth=5), dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/boosting_dataset1.csv")
+# bias_variance_boosting(DecisionTreeClassifier(max_depth=3, min_samples_split=4), dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/boosting_dataset2.csv")
 
 # bias_variance_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/logistic_regression_dataset1.csv")
 # bias_variance_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/logistic_regression_dataset2.csv")
