@@ -191,7 +191,7 @@ def plot_svm_errors(svm_csv_path, dataset_name:str):
 
 
 def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
-    kfold_random_forest_csv_file = open(kfold_random_forest_csv_path, newline='')
+    kfold_random_forest_csv_file = open(kfold_knn_csv_path, newline='')
     csvreader = csv.reader(kfold_random_forest_csv_file)
 
     n_neighbors_list = []
@@ -199,8 +199,10 @@ def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
     training_errors = []
     testing_errors = []
 
-    for row in csvreader:
+    first_row = True
 
+    for row in csvreader:
+        print(row)
         if first_row == True:
             first_row = False
             continue #skip the first row since it contains names of attributes
@@ -208,7 +210,7 @@ def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
         train_error = float(row[6])
         test_error = float(row[7])
 
-        n_neighbors = int(row([8]))
+        n_neighbors = int(row[8])
 
         training_errors.append(train_error)
         testing_errors.append(test_error)
@@ -216,7 +218,7 @@ def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
         n_neighbors_list.append(n_neighbors)
 
         model_attributes_dict = {}
-        modeL_attributes_dict["Number of Neighbors"] = n_neighbors
+        model_attributes_dict["Number of Neighbors"] = n_neighbors_list
 
         plot_train_and_test_errors("K-Fold KNN " + dataset_name, model_attributes_dict, training_errors, testing_errors)
 
@@ -280,17 +282,22 @@ def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:s
 # logistic_regression_dataset2_csv = "bias_variance_comparisons/logistic_regression_dataset2.csv"
 # plot_logistic_regression_errors(logistic_regression_dataset2_csv, "Dataset 2")
 
-#svm_dataset1_csv = "bias_variance_comparisons/svm_dataset1.csv"
-#plot_svm_errors(svm_dataset1_csv, "Dataset 1")
+svm_dataset1_csv = "bias_variance_comparisons/svm_dataset1.csv"
+plot_svm_errors(svm_dataset1_csv, "Dataset 1")
 
-#svm_dataset2_csv = "bias_variance_comparisons/svm_dataset2.csv"
-#plot_svm_errors(svm_dataset2_csv, "Dataset 2")
+svm_dataset2_csv = "bias_variance_comparisons/svm_dataset2.csv"
+plot_svm_errors(svm_dataset2_csv, "Dataset 2")
 
-# kfold_random_forest_dataset1_csv = "bias_variance_comparisons/kfold_random_forest_dataset1.csv"
+knn_dataset1_csv = "bias_variance_comparisons/kfold_knn_dataset1.csv"
+knn_dataset2_csv = "bias_variance_comparisons/kfold_knn_dataset2.csv"
+
+plot_kfold_knn_errors(knn_dataset1_csv, "Dataset 1")
+plot_kfold_knn_errors(knn_dataset2_csv, "Dataset 2")
+#kfold_random_forest_dataset1_csv = "bias_variance_comparisons/kfold_random_forest_dataset1.csv"
 # plot_kfold_random_forest_errors(kfold_random_forest_dataset1_csv, "Dataset 1")
 
-kfold_random_forest_dataset2_csv = "bias_variance_comparisons/kfold_random_forest_dataset2.csv"
-plot_kfold_random_forest_errors(kfold_random_forest_dataset2_csv, "Dataset 2")
+#kfold_random_forest_dataset2_csv = "bias_variance_comparisons/kfold_random_forest_dataset2.csv"
+#plot_kfold_random_forest_errors(kfold_random_forest_dataset2_csv, "Dataset 2")
 
 
 

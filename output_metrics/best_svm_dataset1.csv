@@ -1,1 +1,2 @@
-Model,Accuracy,Precision,Recall,F-1,ROC AUC
+Model,Accuracy,Precision,Recall,F-1,ROC AUC,Train Error,Test Error
+"SVC(C=10.0, gamma=0.1, kernel='linear', probability=True)",0.9823008849557522,1.0,0.9523809523809523,0.975609756097561,0.9963112005365526,0.024229074889867808,0.017699115044247815
