@@ -91,18 +91,18 @@ def bias_variance_svm(X_train, y_train, X_test, y_test, output_csv_path):
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "C", "kernel", "degree", "gamma"])
 
-    for C in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
-        for kernel in ["rbf", "linear", "sigmoid", "poly"]:
-            for degree in [2,3,4]:
-                for gamma in [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
+    for C in [0.1, 1.0, 10.0]:
+        for kernel in ["rbf", "linear", "sigmoid"]:
+            #for degree in [2,3,4]:
+            for gamma in [0.1, 1.0, 10.0]:
 
-                    svm_model = SVC(C=C, kernel=kernel, degree=degree, gamma=gamma, probability=True)
-                    svm_model_trained = svm_model.fit(X_train, y_train)
+                svm_model = SVC(C=C, kernel=kernel,gamma=gamma, probability=True)
+                svm_model_trained = svm_model.fit(X_train, y_train)
     
-                    test_row = test_model(svm_model_trained, X_train, y_train, X_test, y_test)
-                    test_row = test_row + [C, kernel, gamma]
+                test_row = test_model(svm_model_trained, X_train, y_train, X_test, y_test)
+                test_row = test_row + [C, kernel, gamma]
 
-                    writer.writerow(test_row)
+                writer.writerow(test_row)
 
     print("Done running SVM!")
 
@@ -163,12 +163,12 @@ dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X
 # bias_variance_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/logistic_regression_dataset2.csv")
 
 #Caroline can't run these
-# bias_variance_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/svm_dataset1.csv")
-# bias_variance_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/svm_dataset2.csv")
+bias_variance_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/svm_dataset1.csv")
+bias_variance_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/svm_dataset2.csv")
 
 #Caroline can't run these
-# bias_variance_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_knn_dataset1.csv")
-# bias_variance_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_knn_dataset2.csv")
+#bias_variance_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_knn_dataset1.csv")
+#bias_variance_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_knn_dataset2.csv")
 
 # bias_variance_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_random_forest_dataset1.csv")
 # bias_variance_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_random_forest_dataset2.csv")

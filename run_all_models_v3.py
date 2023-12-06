@@ -236,15 +236,15 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
     test_rows = []
 
     parameters = {
-        "C" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
-        "kernel" : ["rbf", "linear", "sigmoid", "poly"],
-        "degree" : [2, 3, 4],
-        "gamma" : [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
+        "C" : [0.1, 1.0, 10.0], #delete extreme cases
+        "kernel" : ["rbf", "linear", "sigmoid"], #delete poly
+        #"degree" : [2, 3, 4],
+        "gamma" : [0.1, 1.0, 10.0] # delete extreme cases
     }
 
     for score_metric in score_metrics:
 
-        gsc = GridSearchCV(estimator=SVC(probability=True), param_grid=parameters, scoring=score_metric, cv=10) #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+        gsc = GridSearchCV(estimator=SVC(probability=True), param_grid=parameters, scoring=score_metric, cv=10, verbose=1) #https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
         grid_result = gsc.fit(X_train, y_train) #TODO accuracy?
         best_params = grid_result.best_params_
         best_svm = grid_result.best_estimator_
@@ -354,12 +354,12 @@ score_metrics = ["accuracy"]
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)
 
 #TODO Caroline can't run these
-# train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_svm_dataset1.csv", score_metrics)
-# train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_svm_dataset2.csv", score_metrics)
+train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_svm_dataset1.csv", score_metrics)
+train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_svm_dataset2.csv", score_metrics)
 
 #TODO Caroline can't run these
-# train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_knn_dataset1.csv", score_metrics)
-# train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_knn_dataset2.csv", score_metrics)
+#train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_knn_dataset1.csv", score_metrics)
+#train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_knn_dataset2.csv", score_metrics)
 
 # train_and_test_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_random_forest_dataset1.csv", score_metrics)
 # train_and_test_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_random_forest_dataset2.csv", score_metrics)
