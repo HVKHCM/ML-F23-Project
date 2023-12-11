@@ -2,7 +2,7 @@
 
 This repository contains code for Parts I and II of our Machine Learning Final project and for our implmentation of the bonus part.
 
-## Data Preprocessing
+## Part I Data Preprocessing
 The code we use for preprocessing our data is found in multiple files. First, we split our data into training and testing sets and write each set to a csv file in the file `create_train_val_test_split.py`. We encountered an issue with running dataset 2 on our models due to one of its features being in string form. Since the feature was binary (present/absent) we replace "present" and "absent" with the integer values 1 and 0, respectively. Code for this step can be found in `convert_data2_str_features_to_int.py`. Finally, we write the functions `get_data()` and `process_data()` in the file `run_all_models.py` to read the data from the csv files and format it to be input into our models. 
 
 ## How to Run Our Code for Part I
