@@ -164,8 +164,8 @@ def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_pat
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
 
     parameters = {
-        "n_estimators" : [(i * 100) for i in range(2, 8)],
-        "max_samples" : [(i/10) for i in range(1, 10)]
+        "n_estimators" : [100,200, 300, 400, 500, 600, 700],
+        "max_samples" : [0.5,0.6,0.7,0.8, 0.9, 1.0]
     }
 
     test_rows = []
