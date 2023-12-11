@@ -65,7 +65,7 @@ def pca3d(datapath):
     ax.set_xlabel('C1', fontsize=20)
     ax.set_ylabel('C2', fontsize=20)
     ax.set_zlabel('C3', fontsize=20)
-    plt.title("Principal Component Analysis of Dataset 1 \n Total Explained Variance : {:.2f}%".format(total_var),fontsize=20)
+    plt.title("Principal Component Analysis of Dataset 2 \n Total Explained Variance : {:.2f}%".format(total_var),fontsize=20)
     targets = [0, 1]
     colors = ['r', 'g']
     for target, color in zip(targets,colors):
@@ -76,12 +76,13 @@ def pca3d(datapath):
                 c = color, s = 10)
         
     for vec in pca.components_:
-        a = Arrow3D([0, vec[0]*45], [0, vec[1]*45], [0, vec[2]*45], mutation_scale=10, 
+        a = Arrow3D([0, vec[0]*20], [0, vec[1]*20], [0, vec[2]*20], mutation_scale=10, 
                 lw=3, arrowstyle="-|>", color="blue", linestyle='dashed')
         ax.add_artist(a)
 
 
     plt.legend(targets,prop={'size': 15})
+    print(len(dataset_X.columns))
 
     return pca.components_, pca.explained_variance_, ax
 
@@ -99,7 +100,7 @@ def ratioProgress(datapath):
     fig = px.area(
         x=range(1, exp_var_cumul.shape[0] + 1),
         y=exp_var_cumul,
-        labels={"x": "# Components", "y": "Explained Variance"}
+        labels={"x": "Number of Components", "y": "Total Explained Variance"}
     )
 
     return fig
