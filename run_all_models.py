@@ -37,7 +37,11 @@ def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/r
 
 #Process data
 def process_data():
-
+'''
+    - Create and plot heatmap of dataset1 and dataset 2 based on Pearson correlation(0 = no correlation, 1 = perfect linear corerlation).
+    - Select he pair of features that have pearson correlation >0.95 and remove one of them with no preference. 
+    - Output: dataset1 and dataset2 without high correlated features.
+'''
     dataset1_X_train, dataset1_y_train = get_data("dataset1_training_data.csv") #read csv file
     dataset1_X_test, dataset1_y_test = get_data("dataset1_testing_data.csv") #read csv file
 
