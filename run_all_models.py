@@ -38,20 +38,20 @@ def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/r
 #Process data
 def process_data():
 
-    dataset1_X_train, dataset1_y_train = get_data("dataset1_training_data.csv")
-    dataset1_X_test, dataset1_y_test = get_data("dataset1_testing_data.csv")
+    dataset1_X_train, dataset1_y_train = get_data("dataset1_training_data.csv") #read csv file
+    dataset1_X_test, dataset1_y_test = get_data("dataset1_testing_data.csv") #read csv file
 
-    dataset2_X_train, dataset2_y_train = get_data("dataset2_training_data.csv")
-    dataset2_X_test, dataset2_y_test = get_data("dataset2_testing_data.csv")
+    dataset2_X_train, dataset2_y_train = get_data("dataset2_training_data.csv") #read csv file
+    dataset2_X_test, dataset2_y_test = get_data("dataset2_testing_data.csv") #read csv file
 
 
     #create heatmap
 
-    fig, ax =plt.subplots(ncols=2, figsize=(20, 8))
+    fig, ax =plt.subplots(ncols=2, figsize=(20, 8)) #Create two subplots on the same canvas
     ax[0].set_title('Correlation data 1', fontsize=30)
     ax[1].set_title('Correlation data 2', fontsize=30)
 
-    sns.heatmap(dataset1_X_train.corr(), ax=ax[0])
+    sns.heatmap(dataset1_X_train.corr(), ax=ax[0]) #Create heatmap based on Pearson correlation of data. 0 = no correlation. 1 = perfect linear correlation.
     sns.heatmap(dataset2_X_train.corr(), ax=ax[1])
 
     plt.show()
@@ -59,12 +59,12 @@ def process_data():
     #Remove high correlated features from dataset (training and test)
 
     # Create correlation matrix
-    corr_matrix_1 = dataset1_X_train.corr()
+    corr_matrix_1 = dataset1_X_train.corr()  #Create Pearson correlation matrix
     
     corr_matrix_2 = dataset2_X_train.corr()
 
     # Select upper triangle of correlation matrix
-    upper_1= corr_matrix_1.where(np.triu(np.ones(corr_matrix_1.shape), k=1).astype(np.bool_))
+    upper_1= corr_matrix_1.where(np.triu(np.ones(corr_matrix_1.shape), k=1).astype(np.bool_)) #Select only upper triangle of correlation matrix. Lower triangle of correlation matrix is the same as upper triangle.
     
     upper_2= corr_matrix_2.where(np.triu(np.ones(corr_matrix_2.shape), k=1).astype(np.bool_))
 
@@ -73,9 +73,9 @@ def process_data():
     
     to_drop_2 = [column for column in upper_2.columns if any(upper_2[column] > 0.95)]
 
-    #new Data Frame without high correlated featues
-    dataset1_X_train=dataset1_X_train.drop(dataset1_X_train[to_drop_1], axis=1)
-    dataset1_X_test=dataset1_X_test.drop(dataset1_X_test[to_drop_1], axis=1)
+    #new Data Frame without high correlated features
+    dataset1_X_train=dataset1_X_train.drop(dataset1_X_train[to_drop_1], axis=1) #If two fature have high correlatio namong themself, only remove one feature, no particular preference which one.
+    dataset1_X_test=dataset1_X_test.drop(dataset1_X_test[to_drop_1], axis=1) 
     
     dataset2_X_train=dataset2_X_train.drop(dataset2_X_train[to_drop_2], axis=1)
     dataset2_X_test=dataset2_X_test.drop(dataset2_X_test[to_drop_2], axis=1) 
