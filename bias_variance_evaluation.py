@@ -45,8 +45,8 @@ def bias_variance_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "n_estimators", "max_samples"])
 
-    for n_estimators in [100,200, 300, 400, 500, 600, 700]:
-        for max_samples in [0.5,0.6,0.7,0.8, 0.9, 1.0]: 
+    for n_estimators in [10,50,100,500]:
+        for max_samples in [0.5,0.6,0.7,0.8]: 
             bag_model = BaggingClassifier( dt, n_estimators=n_estimators,max_samples=max_samples, bootstrap=True, n_jobs=-1)
             bag_model_trained = bag_model.fit(X_train, y_train)
 
