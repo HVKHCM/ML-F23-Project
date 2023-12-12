@@ -5,6 +5,18 @@ import csv
 
 def plot_train_and_test_errors(model_name, model_attributes_dict, training_errors, testing_errors):
 
+    '''
+    Inputs:
+        model_name: the name of the model
+        model_attributes_dict: a dictionary of (key, value) pairs where the key is the name of a model hypermarameter
+        and the value is a list of the values tested for that hyperparameter
+        training_errors: a list of training errors corresponding to the order of the hypermarameter values in modal_attributes_dict
+        testing_errors: a list of testing errors corresponding to the order of the hyperparameter values in model_attributes_dict
+
+        Plots the train and test lossesfor the model and dataset specified in the input with respect to each hyperparameter
+        specified in model_attributes_dict.
+    '''
+
     sample_attribute = list(model_attributes_dict.keys())[0]
     print(sample_attribute)
     print(model_attributes_dict[sample_attribute])
@@ -32,6 +44,19 @@ def plot_train_and_test_errors(model_name, model_attributes_dict, training_error
         plt.savefig("plots/" + model_name.replace(" ", "_") + "_" + model_attribute + ".svg")
 
 def plot_decision_tree_errors(decision_trees_csv_path, dataset_name:str):
+    '''
+    Inputs:
+        decision_trees_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each Decision Tree classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the Decision Tree
+        classifier and the value is a list of the values of that hyperparameter. Also computes the train and test errors of each model, 
+        and then passes all of these values into a plotting function to get figures showing the train and test losses with respect 
+        to the values of each hyperparameter for the Decision Tree classifier. 
+
+    '''
+
     decision_trees_csv_file = open(decision_trees_csv_path, newline='')
     csvreader = csv.reader(decision_trees_csv_file)
 
@@ -74,6 +99,19 @@ def plot_decision_tree_errors(decision_trees_csv_path, dataset_name:str):
 
 
 def plot_boosting_errors(boosting_csv_path, dataset_name:str):
+
+    '''
+    Inputs:
+        boosting_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each Bagging classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the Bagging classifier
+        and the value is a list of the values of that hyperparameter. Also computes the train and test errors of each model, and
+        then passes all of these values into a plotting function to get figures showing the train and test losses with respect 
+        to the values of each hyperparameter for the Bagging classifier. 
+
+    '''
     boosting_csv_file = open(boosting_csv_path, newline='')
     csvreader = csv.reader(boosting_csv_file)
 
@@ -112,6 +150,20 @@ def plot_boosting_errors(boosting_csv_path, dataset_name:str):
 
 
 def plot_logistic_regression_errors(logistic_regression_csv_path, dataset_name:str):
+
+     '''
+    Inputs:
+        logistic_regression_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each Logistic Regression classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the Logistic 
+        Regression classifier and the value is a list of the values of that hyperparameter. Also computes the train and test errors 
+        of each model, and then passes all of these values into a plotting function to get figures showing the train and test losses 
+        with respect to the values of each hyperparameter for the Logistic Regression classifier. 
+
+    '''
+
     logistic_regression_csv_file = open(logistic_regression_csv_path, newline='')
     csvreader = csv.reader(logistic_regression_csv_file)
 
@@ -149,6 +201,20 @@ def plot_logistic_regression_errors(logistic_regression_csv_path, dataset_name:s
     plot_train_and_test_errors("Logistic Regression " + dataset_name, model_attributes_dict, training_errors, testing_errors)
 
 def plot_svm_errors(svm_csv_path, dataset_name:str):
+
+     '''
+    Inputs:
+        svm_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each SVM classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the SVM
+        classifier and the value is a list of the values of that hyperparameter. Also computes the train and test errors of each model, 
+        and then passes all of these values into a plotting function to get figures showing the train and test losses with respect 
+        to the values of each hyperparameter for the SVM classifier. 
+
+    '''
+
     svm_csv_file = open(svm_csv_path, newline='')
     csvreader = csv.reader(svm_csv_file)
 
@@ -191,6 +257,20 @@ def plot_svm_errors(svm_csv_path, dataset_name:str):
 
 
 def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
+
+     '''
+    Inputs:
+        kfold_knn_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each KNN classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the KNN
+        classifier and the value is a list of the values of that hyperparameter. Also computes the train and test errors of each model, 
+        and then passes all of these values into a plotting function to get figures showing the train and test losses with respect 
+        to the values of each hyperparameter for the KNN classifier. 
+
+    '''
+
     kfold_random_forest_csv_file = open(kfold_knn_csv_path, newline='')
     csvreader = csv.reader(kfold_random_forest_csv_file)
 
@@ -225,6 +305,20 @@ def plot_kfold_knn_errors(kfold_knn_csv_path, dataset_name:str):
 
 
 def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:str):
+
+     '''
+    Inputs:
+        random_forest_csv_path: the path to the csv file with the information (performance metrics, hyperparameters) of 
+        each Random Forest classifier tested in bias_variance_evaluation.py
+        dataset_name: the name of the dataset the models were run on.
+
+        Compiles a dictionary of (key,value) pairs where the key is the name of a hyperparameter that was tested for the Random Forest
+        classifier and the value is a list of the values of that hyperparameter. Also computes the train and test errors of each model, 
+        and then passes all of these values into a plotting function to get figures showing the train and test losses with respect 
+        to the values of each hyperparameter for the Random Forest classifier. 
+
+    '''
+
     kfold_random_forest_csv_file = open(kfold_random_forest_csv_path, newline='')
     csvreader = csv.reader(kfold_random_forest_csv_file)
 
@@ -270,11 +364,11 @@ def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:s
 # decision_tree_dataset2_csv = "bias_variance_comparisons/decision_tree_dataset2.csv"
 # plot_decision_tree_errors(decision_tree_dataset2_csv, "Dataset 2")
 
-#boosting_dataset1_csv = "bias_variance_comparisons/best_boosting_dataset1.csv"
-#plot_boosting_errors(boosting_dataset1_csv, "Dataset 1")
+# boosting_dataset1_csv = "bias_variance_comparisons/best_boosting_dataset1.csv"
+# plot_boosting_errors(boosting_dataset1_csv, "Dataset 1")
 
-#boosting_dataset2_csv = "bias_variance_comparisons/best_boosting_dataset2.csv"
-#plot_boosting_errors(boosting_dataset2_csv, "Dataset 2")
+# boosting_dataset2_csv = "bias_variance_comparisons/best_boosting_dataset2.csv"
+# plot_boosting_errors(boosting_dataset2_csv, "Dataset 2")
 
 # logistic_regression_dataset1_csv = "bias_variance_comparisons/logistic_regression_dataset1.csv"
 # plot_logistic_regression_errors(logistic_regression_dataset1_csv, "Dataset 1")
@@ -282,22 +376,23 @@ def plot_kfold_random_forest_errors(kfold_random_forest_csv_path, dataset_name:s
 # logistic_regression_dataset2_csv = "bias_variance_comparisons/logistic_regression_dataset2.csv"
 # plot_logistic_regression_errors(logistic_regression_dataset2_csv, "Dataset 2")
 
-svm_dataset1_csv = "bias_variance_comparisons/svm_dataset1.csv"
-plot_svm_errors(svm_dataset1_csv, "Dataset 1")
+# svm_dataset1_csv = "bias_variance_comparisons/svm_dataset1.csv"
+# plot_svm_errors(svm_dataset1_csv, "Dataset 1")
 
-svm_dataset2_csv = "bias_variance_comparisons/svm_dataset2.csv"
-plot_svm_errors(svm_dataset2_csv, "Dataset 2")
+# svm_dataset2_csv = "bias_variance_comparisons/svm_dataset2.csv"
+# plot_svm_errors(svm_dataset2_csv, "Dataset 2")
 
-knn_dataset1_csv = "bias_variance_comparisons/kfold_knn_dataset1.csv"
-knn_dataset2_csv = "bias_variance_comparisons/kfold_knn_dataset2.csv"
+# knn_dataset1_csv = "bias_variance_comparisons/kfold_knn_dataset1.csv"
+# knn_dataset2_csv = "bias_variance_comparisons/kfold_knn_dataset2.csv"
 
-plot_kfold_knn_errors(knn_dataset1_csv, "Dataset 1")
-plot_kfold_knn_errors(knn_dataset2_csv, "Dataset 2")
-#kfold_random_forest_dataset1_csv = "bias_variance_comparisons/kfold_random_forest_dataset1.csv"
+# plot_kfold_knn_errors(knn_dataset1_csv, "Dataset 1")
+# plot_kfold_knn_errors(knn_dataset2_csv, "Dataset 2")
+
+# kfold_random_forest_dataset1_csv = "bias_variance_comparisons/kfold_random_forest_dataset1.csv"
 # plot_kfold_random_forest_errors(kfold_random_forest_dataset1_csv, "Dataset 1")
 
-#kfold_random_forest_dataset2_csv = "bias_variance_comparisons/kfold_random_forest_dataset2.csv"
-#plot_kfold_random_forest_errors(kfold_random_forest_dataset2_csv, "Dataset 2")
+# kfold_random_forest_dataset2_csv = "bias_variance_comparisons/kfold_random_forest_dataset2.csv"
+# plot_kfold_random_forest_errors(kfold_random_forest_dataset2_csv, "Dataset 2")
 
 
 
