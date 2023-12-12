@@ -53,9 +53,8 @@ class AddGaussianNoise(object):
         return self.__class__.__name__ + '(mean={0}, std={1})'.format(self.mean, self.std)
     
 
-#def creating_noise(originalImage):
-#    transform = tv.transforms.Compose([transforms.ToTensor()])
-
+# The class belown are an auto encoder that was created under the help of GeeksForGeeks tutorial
+# Link: https://www.geeksforgeeks.org/implement-deep-autoencoder-in-pytorch-for-image-reconstruction/
 class DeepAutoencoder(torch.nn.Module): 
     def __init__(self): 
         super().__init__()         
