@@ -18,6 +18,21 @@ from run_all_models_v3 import get_data, process_data, test_model, get_train_and_
 #Decision Tree
 def bias_variance_decision_tree(X_train, y_train, X_test, y_test, output_csv_path):
 
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests Decicion Tree classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
+
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "max_depth", "min_samples_split", "min_samples_leaf"])
@@ -41,6 +56,21 @@ def bias_variance_decision_tree(X_train, y_train, X_test, y_test, output_csv_pat
 #Boosting
 def bias_variance_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path):
 
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests Bagging classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
+
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F1", "ROC_AUC", "Train Error", "Test Error", "n_estimators", "max_samples"])
@@ -60,6 +90,21 @@ def bias_variance_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path
 
 #Logistic Regression
 def bias_variance_logistic_regression(X_train, y_train, X_test, y_test, output_csv_path):
+
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests Logistic Regression classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
@@ -86,6 +131,21 @@ def bias_variance_logistic_regression(X_train, y_train, X_test, y_test, output_c
     
 #SVM
 def bias_variance_svm(X_train, y_train, X_test, y_test, output_csv_path):
+
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests Logistic Regression classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
     
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
@@ -108,6 +168,21 @@ def bias_variance_svm(X_train, y_train, X_test, y_test, output_csv_path):
 
 #KNN
 def bias_variance_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path, range_tune=[1,10],fold=10):
+
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests KNN classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
     assert range_tune [0] < range_tune[1]
     
     output_csv_file = open(output_csv_path, 'w', newline='')
@@ -129,6 +204,22 @@ def bias_variance_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path, 
 
 #Random Forests
 def bias_variance_kfold_random_forest(X_train, y_train, X_test, y_test, output_csv_path, trees = [1,10], depth=[1,10], fold=10):
+
+    '''
+    Inputs:
+        X_train: training data datapoints
+        y_train: training data labels
+        X_test: test data datapoints
+        y_test: test data labels
+        output_csv_path: csv file to write to
+
+    Given a predefined set of hyperparameter ranges, trains and tests Random Forest classifiers with all combinations
+    of the given hyperparameters and calculates the accuracy, precision, recall, f1, ROC_AUC, train error, and test error
+    of each model. Writes the string representation of the model, the evaluation metrics specified above, and the values of
+    each hyperparameter for each model to a row in a csv file.
+
+    '''
+
     assert trees[0] < trees[1]
     assert depth[0] < depth[1]
 
@@ -162,13 +253,11 @@ dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X
 # bias_variance_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/logistic_regression_dataset1.csv")
 # bias_variance_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/logistic_regression_dataset2.csv")
 
-#Caroline can't run these
-bias_variance_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/svm_dataset1.csv")
-bias_variance_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/svm_dataset2.csv")
+# bias_variance_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/svm_dataset1.csv")
+# bias_variance_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/svm_dataset2.csv")
 
-#Caroline can't run these
-#bias_variance_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_knn_dataset1.csv")
-#bias_variance_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_knn_dataset2.csv")
+# bias_variance_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_knn_dataset1.csv")
+# bias_variance_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_knn_dataset2.csv")
 
 # bias_variance_kfold_random_forest(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "bias_variance_comparisons/kfold_random_forest_dataset1.csv")
 # bias_variance_kfold_random_forest(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "bias_variance_comparisons/kfold_random_forest_dataset2.csv")
