@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import torchviz
 
+# Neural network from scratch using pytorch nn module
 class Net(nn.Module):
     def __init__(self, unit1, unit2):
         super().__init__()
@@ -29,14 +30,12 @@ class Net(nn.Module):
         
         return out
 
-
+# Function to find and write out data for each parameters setting
 def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, lr_range):
     f = open("data.csv", "a")
     f.write("epochs,firstHU,secondHU,lr,acc,trainAcc\n")
     f.close()
     accuracy_list = []
-    #bias_list = []
-    #var_list = []
     all_config = []
     train_error = []
     count = 0
@@ -54,9 +53,6 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
                     trained_model = train_model(model,epochs, loss_fun, optimizer, X_train, y_train)
                     accuracy_list.append(eval_model(trained_model, X_test, y_test))
                     train_error.append(eval_model_train(trained_model, X_train, y_train))
-                    #bias, variance = get_bias_variance(model, X_train, y_train, X_test, y_test)
-                    #bias_list.append(bias)
-                    #var_list.append(variance)
                     f = open("data.csv", "a")
                     f.write("{},{},{},{},{},{}\n".format(epochs,i,j,l,accuracy_list[-1],train_error[-1]))
                     f.close()
@@ -64,6 +60,7 @@ def unit_optimize(epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_rang
                     count += 1
     return train_error, accuracy_list, all_config
 
+# Training loop for neural network
 def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
     for n in range(epochs):
         for x,y in zip(X_train, y_train):
@@ -76,8 +73,8 @@ def train_model(model, epochs, loss_fun, optimizer, X_train, y_train):
             optimizer.step()
     return model
 
+# Evaluate the model performance on the training set
 def eval_model_train(model, X_test, y_test):
-    #model.eval()
     prediction = []
     for x,y in zip(X_test, y_test): 
         x_tensor = torch.transpose(torch.tensor(x),0,1)
@@ -91,8 +88,8 @@ def eval_model_train(model, X_test, y_test):
     acc = float(correct/len(prediction))
     return acc
 
+#Evaluate the model performance on the testing set
 def eval_model(model, X_test, y_test):
-    #model.eval()
     prediction = []
     incorrect = []
     for x,y in zip(X_test, y_test): 
