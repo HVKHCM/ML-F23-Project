@@ -1,3 +1,5 @@
 Model,Accuracy,Precision,Recall,F-1,ROC AUC,Train Error,Test Error
-"BaggingClassifier(estimator=DecisionTreeClassifier(max_depth=5),
-                  max_samples=0.8, n_estimators=300, n_jobs=-1)",0.9646017699115044,0.975,0.9285714285714286,0.951219512195122,0.9899396378269618,0.004405286343612369,0.03539823008849563
+"BaggingClassifier(base_estimator=DecisionTreeClassifier(max_depth=7,
+                                                        min_samples_leaf=3,
+                                                        min_samples_split=3),
+                  max_samples=0.8, n_estimators=50, n_jobs=-1)",0.9557522123893806,0.9743589743589743,0.9047619047619048,0.9382716049382716,0.9916163648558015,0.01541850220264318,0.04424778761061943
