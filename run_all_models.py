@@ -16,6 +16,10 @@ import csv
 
 #Get data
 def get_data(data_csv_path:str): #https://pandas.pydata.org/pandas-docs/stable/reference/frame.html 
+'''
+    Input: a csv file of data and laels
+    Output: a Pandas DataFrame of the datapoints and a list of the labels
+'''
     df = pd.read_csv(data_csv_path)
     df.columns=["x"+str(i) for i in range(len(df.columns))]
     df.rename(columns = {list(df)[len(df.columns)-1]:'label'}, inplace=True)
@@ -79,6 +83,20 @@ def process_data():
     return dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test 
 
 def get_train_and_test_predictions(model, X_train, y_train, X_test, y_test):
+    '''
+    Inputs:
+        model: a model
+        X_train: training data datapoints
+        y_train: training labels
+        X_test: testing data datapoints
+        y_test: testing labels
+
+    Runs all training data and testing data through the model and outputs lists of the corresponding model predictions.
+
+    Outputs:
+        a list of the model predictions on the training data and a list of the model predictions on the testing data.
+    '''
+
     train_predictions = []
     test_predictions = []
 
@@ -95,6 +113,20 @@ def get_train_and_test_predictions(model, X_train, y_train, X_test, y_test):
     return (train_predictions, test_predictions)
 
 def test_model(model, X_train, y_train, X_test, y_test):
+
+    '''
+    Inputs:
+        model: a model
+        X_train: training data datapoints
+        y_train: trainig data labels
+        X_test: testing data datapoints
+        y_test: testing data labels
+
+    Computes the train error, test error, accuracy, precision, recall, f1 score, and roc_auc of the input model
+
+    Output: a list of all metrics computed, in the following order: [model, accuracy, precision, recall, f1, roc_auc, str(train_error), str(test_error)]
+
+    '''
 
     train_predictions, test_predictions = get_train_and_test_predictions(model, X_train, y_train, X_test, y_test)
 
@@ -121,6 +153,14 @@ def test_model(model, X_train, y_train, X_test, y_test):
 
 #Decision Tree
 def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list):
+
+    '''
+    Finds the best Decision Tree classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
@@ -151,13 +191,21 @@ def train_and_test_decision_tree(X_train, y_train, X_test, y_test, output_csv_pa
         test_row = test_model(model, X_train, y_train, X_test, y_test)
         test_rows.append(test_row)
 
-    for row in test_rows:
+    for row in test_rows: #write as many best models as there are score metric to consider
         writer.writerow(row)
 
     return dt_best_accuracy
 
 #Boosting
 def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list):
+
+    '''
+    Finds the best Bagging classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
@@ -194,6 +242,14 @@ def train_and_test_boosting(dt, X_train, y_train, X_test, y_test, output_csv_pat
 #Logistic Regression
 def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list):
 
+    '''
+    Finds the best Logistic Regression classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
+
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
@@ -228,6 +284,14 @@ def train_and_test_logistic_regression(X_train, y_train, X_test, y_test, output_
     
 #SVM
 def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list):
+
+    '''
+    Finds the best SVM classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
 
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
@@ -267,6 +331,14 @@ def train_and_test_svm(X_train, y_train, X_test, y_test, output_csv_path, score_
 #KNN
 def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list, range_tune=[1,10]):
 
+    '''
+    Finds the best KNN classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
+
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
@@ -305,6 +377,14 @@ def train_and_test_kfold_knn (X_train, y_train, X_test, y_test, output_csv_path,
 #Random Forests
 def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_csv_path, score_metrics:list, trees = [1,10], depth=[1,10]):
 
+    '''
+    Finds the best Random Forest classifier based on a pre-defined set of hyperparameters and a scoring metric using
+    10-fold cross-validation (we use sklearn's GridSearchCV() function). Outputs a csv file of the best model found
+    for each score metric, along with its performance across the followin metrics: accuracy, precision, recall, f1 score, 
+    roc_auc, train_error, and test_error.
+
+    '''
+
     output_csv_file = open(output_csv_path, 'w', newline='')
     writer = csv.writer(output_csv_file)
     writer.writerow(["Model", "Accuracy", "Precision", "Recall", "F-1", "ROC AUC", "Train Error", "Test Error"])
@@ -342,7 +422,7 @@ def train_and_test_kfold_random_forest(X_train, y_train, X_test, y_test, output_
 
 
 dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test = process_data()
-score_metrics = ["accuracy"]
+score_metrics = ["accuracy"] #score metric(s) used to determine model performance
 
 # dt_dataset1 = train_and_test_decision_tree(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_decision_tree_dataset1.csv", score_metrics)
 # dt_dataset2 = train_and_test_decision_tree(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_decision_tree_dataset2.csv", score_metrics)
@@ -353,11 +433,9 @@ score_metrics = ["accuracy"]
 # train_and_test_logistic_regression(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_logistic_regression_dataset1.csv", score_metrics)
 # train_and_test_logistic_regression(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_logistic_regression_dataset2.csv", score_metrics)
 
-#TODO Caroline can't run these
-train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_svm_dataset1.csv", score_metrics)
-train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_svm_dataset2.csv", score_metrics)
+# train_and_test_svm(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_svm_dataset1.csv", score_metrics)
+# train_and_test_svm(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_svm_dataset2.csv", score_metrics)
 
-#TODO Caroline can't run these
 #train_and_test_kfold_knn(dataset1_X_train, dataset1_y_train, dataset1_X_test, dataset1_y_test, "output_metrics/best_kfold_knn_dataset1.csv", score_metrics)
 #train_and_test_kfold_knn(dataset2_X_train, dataset2_y_train, dataset2_X_test, dataset2_y_test, "output_metrics/best_kfold_knn_dataset2.csv", score_metrics)
 
