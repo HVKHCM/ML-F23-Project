@@ -140,47 +140,6 @@ counter = 1
 # for epochs = [1, 5, 10, 50, 100] 
 epochs_list = [1, 5, 10, 50, 100] 
   
-# Iterating over specified epochs 
-#for val in epochs_list: 
-    
-      # Extracting recorded information 
-#    temp = outputs[val]['out'].detach().numpy() 
-#    title_text = f"Epoch = {val}"
-      
-    # Plotting first five images of the last batch 
-#    for idx in range(5): 
-#        plt.subplot(7, 5, counter) 
-#        plt.title(title_text) 
-#        plt.imshow(temp[idx].reshape(28,28), cmap= 'gray') 
-#        plt.axis('off') 
-          
-        # Incrementing the subplot counter 
-#        counter+=1
-  
-# Plotting original images 
-  
-# Iterating over first five 
-# images of the last batch 
-#for idx in range(5): 
-      
-    # Obtaining image from the dictionary 
-#    val = outputs[10]['img'] 
-      
-    # Plotting image 
-#    plt.subplot(7,5,counter) 
-#    plt.imshow(val[idx].reshape(28, 28), 
-#               cmap = 'gray') 
-#    plt.title("Original Image") 
-#    plt.axis('off') 
-      
-    # Incrementing subplot counter 
-#    counter+=1
-  
-#plt.tight_layout() 
-#plt.show()
-
-# Dictionary that will store the different 
-# images and outputs for various epochs 
 outputs = {} 
 
   
@@ -204,19 +163,9 @@ outputs['out'] = out
 counter = 1
 val = outputs['out'].detach().numpy() 
   
-# Plotting first 10 images of the batch 
-for idx in range(10): 
-    plt.subplot(2, 10, counter) 
-    plt.title("Reconstructed \n image") 
-    plt.imshow(val[idx].reshape(28, 28), cmap='gray') 
-    plt.axis('off') 
-  
-    # Incrementing subplot counter 
-    counter += 1
-  
 # Plotting original images 
   
-# Plotting first 10 images 
+""" # Plotting first 10 images 
 for idx in range(10): 
     val = outputs['img'] 
     plt.subplot(2, 10, counter) 
@@ -228,17 +177,38 @@ for idx in range(10):
     counter += 1
   
 plt.tight_layout() 
-plt.show() 
+plt.show()  """
 
-originalImageRaw = list(test_loader)[-1][0][0]
+originalImageRaw = list(test_loader)[-1][0][9]
 originalImage = originalImageRaw.reshape(-1,28*28)
 out1 = model(originalImage)
 out1Img = out1.detach().numpy()
 out1up = out1Img.reshape(28,28)
 noise = cv2.GaussianBlur(np.squeeze(originalImageRaw.numpy()), (19,19), 5)
 noiseExtract = noise - np.squeeze(originalImageRaw.numpy())
-print(noiseExtract)
-phiRange = np.arange(0.0,1.01,0.01)
+result = utils.solver(originalImageRaw, noiseExtract, model)
+adv = np.squeeze(originalImageRaw.numpy()) + result.x*noiseExtract
+noiseExp = np.expand_dims(adv, axis=0)
+noiseTensor = torch.Tensor(noiseExp)
+noiseImg = noiseTensor.reshape(-1,28*28)
+output = model(noiseImg)
+out2Img = output.detach().numpy()
+outputToshow = out2Img.reshape(28,28)
+inputToshow = originalImage.reshape(28,28)
+advToshow = noiseImg.reshape(28,28)
+print(result.x)
+plt.imshow(inputToshow, cmap='gray')
+plt.show()
+plt.imshow(out1up, cmap='gray')
+plt.show()
+plt.imshow(advToshow,cmap='gray')
+plt.show()
+plt.imshow(outputToshow, cmap='gray') 
+plt.show()
+
+
+
+""" phiRange = np.arange(0.0,1.01,0.01)
 
 inputAdv = []
 outputAdv = []
@@ -274,11 +244,11 @@ for idx in review:
     plt.axis('off') 
   
     # Incrementing subplot counter 
-    counter += 1
+    counter += 1 """
   
 # Plotting original images 
   
-# Plotting first 10 images 
+""" # Plotting first 10 images 
 for idx in review: 
     plt.subplot(2, 10, counter) 
     plt.imshow(inputAdv[idx], cmap='gray') 
@@ -290,7 +260,7 @@ for idx in review:
   
 plt.tight_layout() 
 plt.show() 
-
+ """
 
 #noiseExp = np.expand_dims(noise, axis=0)
 #noiseTensor = torch.Tensor(noiseExp)

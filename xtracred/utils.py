@@ -16,24 +16,30 @@ def simp_norm(map1, map2):
     return np.sqrt(norm)
 
 
-def frobenius_norm(originalImage, noise, model, x):
+def frobenius_norm(originalImageRaw, noise, model, x):
+    originalImage = originalImageRaw.reshape(-1,28*28)
     map1 = model(originalImage)
-    map2 = model(originalImage + x*noise)
+    adv = np.squeeze(originalImageRaw.numpy()) + x*noise
+    noiseExp = np.expand_dims(adv, axis=0)
+    noiseTensor = torch.Tensor(noiseExp)
+    noiseImg = noiseTensor.reshape(-1,28*28)
+    map2 = model(noiseImg)
     difference = map2 - map1
+    difference = difference.reshape(-1,28*28)
+    difference = difference.detach().numpy()
     norm = 0
-    for i in range(28):
-        for j in range(28):
-            norm += difference[i][j]**2
+    print(difference)
+    for i in range(784):
+            norm += difference[0][i]**2
     return np.sqrt(norm)
 
-def objective(originalImage, noise, model, x):
-    return 1/frobenius_norm(originalImage, noise, model, x)
+def objective(x,originalImageRaw, noise, model):
+    return 1/frobenius_norm(originalImageRaw, noise, model, x)
 
-def adversarial(originalImage, noise, model):
-    result = opt.minimize(objective, bounds=[(0,1)], args=(originalImage, noise, model, ))
-    out = model(originalImage + result.x*noise)
-    p = plt.imshow(out.reshape(28.28), cmap='gray')
-    return result.x, p
+def solver(originalImageRaw, noise, model):
+    result = opt.minimize(objective,0.5,args=(originalImageRaw,noise,model,), bounds=[(0.01,1.0)])
+    return result
+
 
 class AddGaussianNoise(object):
     def __init__(self, mean=0., std=1.):

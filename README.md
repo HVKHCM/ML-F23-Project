@@ -11,3 +11,15 @@ In Part I, we run Logistic Regression, Boosting, KNN, Decision Trees, Random For
 1) For each model, we establish a set of hyperparameters to test and run 10-fold cross-validation on each model using the training data for each dataset. We record the best classifier found for each model type. The code for these first two steps can be found in the file `run_all_models.py`. The best models found for each dataset can be found in the folder `output_metrics`.
 2)  Next, we take the lists of parameters we eatsblished in step 1 and modify them as needed based on our results from cross-validation. Then, for each type of model, we train classifiers with all combinations of the hypoerparameters on all the training data and test on the test data. We measure the performance of each model with respect to the different hyperparameters considered to analyze how each hyperparameter contributes to the bias and variance of each mode. Code for this step can be found in the file `bias_variance_evaluation.py`. Outputs from this step can be found in the folder `bias_variance_comparisons`.
 3)  Finally, we plot the train and test losses with respect to each hyperparameter considered for each model. Code for generating these plots can be found in the file `plot_results.py`. Outputs from this step can be found in the folder `plots`.
+
+## How to Run Our Code Part II
+In Part II, we run Multilayer Perceptron. All the codes could be located inside neural folder. There are two files:
+- utils.py: all necessary function
+- main.py: code execution
+
+There is no step for processing except some manipulation to transpose and transform data into pytorch tensor.
+
+1) To train model, use function `train_model()` which would require predefined set of parameter [model, epochs, loss_fun, optimizer, X_train, y_train]
+2) To evaluate model on the training set, use function `eval_model_train()`, which would require a trained model, X_test, and y_test
+3) To evaluate model on the testing set, use function `eval_model()`, which would require a trained model, X_test, y_test
+4) To run parameter tuning, use function `unit_optimize()` which require predefinied set of parameter [epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, lr_range]
