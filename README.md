@@ -26,6 +26,8 @@ There is no step for processing except some manipulation to transpose and transf
 3) To evaluate model on the testing set, use function `eval_model()`, which would require a trained model, X_test, y_test
 4) To run parameter tuning, use function `unit_optimize()` which require predefinied set of parameter [epochs, loss_fun, X_train, y_train, X_test, y_test, unit1_range, unit2_range, lr_range]
 
+To regenrate plot, please refer to `plots.Rmd`. All the plots and analysis in this part was done using R.
+
 ## How to Run code for Extra Credit
 To run extra credit and perform an attack on reconstruction process, please refer to `xtracred` folder. The file `utils.py` include the class to generate a deep autoencoder that was created under the help of [this tutorial](https://www.geeksforgeeks.org/implement-deep-autoencoder-in-pytorch-for-image-reconstruction/). At the same time, `utils.py` also contain methods to calculate `frobenius_norm()`, `solver()` for optimization described in the project report.
 
