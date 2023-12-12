@@ -1,0 +1,79 @@
+---
+title: "Project"
+date: "December 12th, 2023"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(hrbrthemes)
+library(ggsci)
+library(dplyr)
+library(readr)
+library(mosaic)
+library(ggpubr)
+library(gridExtra)
+library(patchwork)
+library(stringr)
+library(ggrepel)
+```
+
+```{r}
+data <- read_csv("~/Desktop/ML/F23-proj/neural/data.csv")
+df <- data %>%
+  select(firstHU, secondHU, lr, acc, trainAcc) %>%
+  mutate(class = case_when(
+    firstHU == 10 & secondHU == 10 ~ "[10,10]",
+    firstHU == 10 & secondHU == 30 ~ "[10,30]",
+    firstHU == 10 & secondHU == 50 ~ "[10,50]",
+    firstHU == 30 & secondHU == 10 ~ "[30,10]",
+    firstHU == 30 & secondHU == 30 ~ "[30,30]",
+    firstHU == 30 & secondHU == 50 ~ "[30,50]",
+    firstHU == 50 & secondHU == 10 ~ "[50,10]",
+    firstHU == 50 & secondHU == 30 ~ "[50,30]",
+    firstHU == 50 & secondHU == 50 ~ "[50,50]",
+    firstHU == 70 & secondHU == 10 ~ "[70,10]",
+    firstHU == 70 & secondHU == 30 ~ "[70,30]",
+    firstHU == 70 & secondHU == 50 ~ "[70,50]",
+    firstHU == 90 & secondHU == 10 ~ "[90,10]",
+    firstHU == 90 & secondHU == 30 ~ "[90,30]",
+  )) %>%
+  mutate(classLR1 = case_when(
+    secondHU == 10 & lr == 0.01 ~ "[10,0.1]",
+    secondHU == 10 & lr == 0.1 ~ "[10,0.1]",
+    secondHU == 10 & lr == 0.5 ~ "[10,0.5]",
+    secondHU == 10 & lr == 0.9 ~ "[10,0.9]",
+    secondHU == 30 & lr == 0.01 ~ "[30,0.1]",
+    secondHU == 30 & lr == 0.1 ~ "[30,0.1]",
+    secondHU == 30 & lr == 0.5 ~ "[30,0.5]",
+    secondHU == 30 & lr == 0.9 ~ "[30,0.9]",
+    secondHU == 50 & lr == 0.01 ~ "[50,0.1]",
+    secondHU == 50 & lr == 0.1 ~ "[50,0.1]",
+    secondHU == 50 & lr == 0.5 ~ "[50,0.5]",
+    secondHU == 50 & lr == 0.9 ~ "[50,0.9]",
+  ))
+View(df)
+df %>%
+  ggplot(aes(trainAcc,acc))+
+  geom_line()+
+  facet_wrap(~class)+
+  xlab("Train Accuracy")+
+  ylab("Test Accuracy")
+
+df %>%
+  ggplot(aes(trainAcc, acc))+
+  geom_point()+
+  geom_text_repel(aes(label=class), max.overlaps = Inf)+
+  facet_wrap(~lr)+
+  xlab("Train Accuracy")+
+  ylab("Test Accuracy")
+
+df %>%
+  arrange(-trainAcc)
+
+df %>%
+  arrange(-acc)
+```
